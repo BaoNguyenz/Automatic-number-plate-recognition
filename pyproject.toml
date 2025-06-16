@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "anpr-streamlit-project"
+version = "0.1.0"
+description = "Real-time Automatic Number Plate Recognition."
+authors = ["baonguyen <baonguyen>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.35.0"  
+streamlit-webrtc = "^0.47.0"
+opencv-python-headless = "^4.9.0"
+ultralytics = "^8.2.0"
+easyocr = "^1.7.0"
+torch = "^2.3.0"
+torchvision = "^0.18.0"
+scipy = "^1.13.0"
+pyyaml = "^6.0"
+av = "^12.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

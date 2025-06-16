@@ -1,0 +1,16 @@
+# config.yaml
+
+# ===== PATHS =====
+# Đường dẫn đến các model weights 
+weights:
+  vehicle_detector: 'Weight/yolov8n.pt'
+  license_plate_detector: 'Weight/license_plate_detector.pt'
+
+# ===== SETTINGS =====
+# 2: car, 3: motorcycle, 5: bus, 7: truck
+vehicle_classes: [2, 3, 5, 7]
+
+# Cài đặt cho OCR
+ocr:
+  languages: ['en']
+  use_gpu: false  
