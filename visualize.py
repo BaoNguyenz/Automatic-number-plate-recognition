@@ -24,13 +24,13 @@ def draw_border(img, top_left, bottom_right, color=(0, 255, 0), thickness=10, li
     return img
 
 
-results = pd.read_csv(r'test_interpolated.csv')
+results = pd.read_csv(r'Csv_results\test.csv')
 
 # load video
 video_path = '2103099-uhd_3840_2160_30fps.mp4'
 cap = cv2.VideoCapture(video_path)
 
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Specify the codec
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')  
 fps = cap.get(cv2.CAP_PROP_FPS)
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
