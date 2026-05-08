@@ -67,7 +67,7 @@ Automatic number plate recognition/
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/BaoNguyenz/Automatic-number-plate-recognition.git
 cd "Automatic number plate recognition"
 ```
 
@@ -77,7 +77,7 @@ It is recommended to use Conda:
 
 ```bash
 conda env create -f environment.yml
-conda activate <env-name>
+conda activate plateregv3
 ```
 
 *(Alternatively, you can install the main packages via pip: `pip install ultralytics opencv-python easyocr filterpy sort`)*
