@@ -27,7 +27,7 @@ if str(ROOT) not in sys.path:
 
 from src.database.connection import DatabaseManager
 from src.vision import VehiclePlateDetector, BestFrameTracker, TrackedVehicle
-from src.recognition import Qwen2VLEngine, PlatePostProcessor
+from src.recognition import Qwen2VLEngine, PaddleOCREngine, PlatePostProcessor
 from src.utils import PlateStorageManager, TrajectoryInterpolator, ANPRVisualizer
 
 
@@ -40,11 +40,12 @@ def run_pipeline(
     video_path: Optional[str] = None,
     output_path: Optional[str] = None,
     max_frames: Optional[int] = None,
-    skip_render: bool = False
+    skip_render: bool = False,
+    engine: Optional[str] = None
 ):
     print("=" * 85)
     print("🚦 AUTOMATIC NUMBER PLATE RECOGNITION (ANPR) - MASTER PIPELINE")
-    print("   Architecture: TensorRT (YOLOv8) -> ByteTrack -> Qwen2-VL-2B QLoRA -> SQLite -> WebP")
+    print("   Architecture: TensorRT (YOLOv8) -> ByteTrack -> OCR/VLM Recognition -> SQLite -> WebP")
     print("=" * 85)
 
     config = load_config(ROOT / "config" / "config.yaml")
@@ -80,16 +81,26 @@ def run_pipeline(
         tracker_type=config["vision"]["tracker"]
     )
 
-    # 4. Initialize Qwen2-VL Engine with LoRA
-    print("\n[+] [4/6] Khởi tạo Lõi Nhận Diện Qwen2-VL-2B (QLoRA Adapter)...")
-    lora_dir = ROOT / config["paths"]["vlm_lora_dir"]
-    vlm_engine = Qwen2VLEngine(
-        model_id=config["paths"]["vlm_model_id"],
-        processor_id="Qwen/Qwen2-VL-2B-Instruct",
-        lora_dir=str(lora_dir) if lora_dir.exists() else None,
-        prompt=config["vlm"]["prompt"],
-        max_new_tokens=config["vlm"]["max_new_tokens"]
-    )
+    # 4. Initialize Recognition Engine (PaddleOCR or Qwen2-VL)
+    engine_choice = (engine or config.get("recognition", {}).get("engine", "paddleocr")).lower()
+    if engine_choice == "paddleocr":
+        print("\n[+] [4/6] Khởi tạo Lõi Nhận Diện PaddleOCR Engine...")
+        rec_engine = PaddleOCREngine(
+            lang=config.get("recognition", {}).get("paddle_lang", "en"),
+            use_angle_cls=config.get("recognition", {}).get("paddle_use_angle_cls", False),
+            show_log=False
+        )
+    else:
+        print("\n[+] [4/6] Khởi tạo Lõi Nhận Diện Qwen2-VL-2B (QLoRA Adapter)...")
+        lora_dir = ROOT / config["paths"]["vlm_lora_dir"]
+        rec_engine = Qwen2VLEngine(
+            model_id=config["paths"]["vlm_model_id"],
+            processor_id="Qwen/Qwen2-VL-2B-Instruct",
+            lora_dir=str(lora_dir) if lora_dir.exists() else None,
+            prompt=config["vlm"]["prompt"],
+            max_new_tokens=config["vlm"]["max_new_tokens"]
+        )
+
 
     # 5. Initialize Storage & Visualizer
     storage = PlateStorageManager(base_dir=str(ROOT / config["paths"]["media_dir"]))
@@ -123,8 +134,8 @@ def run_pipeline(
         if v.best_crop is None:
             return
 
-        # 1. VLM Recognition
-        rec_res = vlm_engine.recognize_plate(v.best_crop, vehicle_type=v.vehicle_type)
+        # 1. OCR / VLM Recognition
+        rec_res = rec_engine.recognize_plate(v.best_crop, vehicle_type=v.vehicle_type)
         plate_str = rec_res["plate_number"]
         v.plate_text = plate_str
 
@@ -296,11 +307,14 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=str, default="out.mp4", help="Path to output video")
     parser.add_argument("--max-frames", type=int, default=None, help="Max frames to process")
     parser.add_argument("--skip-render", action="store_true", help="Skip video rendering")
+    parser.add_argument("--engine", type=str, default=None, choices=["paddleocr", "qwen2_vl"], help="Recognition engine (paddleocr or qwen2_vl)")
     args = parser.parse_args()
 
     run_pipeline(
         video_path=args.video,
         output_path=args.output,
         max_frames=args.max_frames,
-        skip_render=args.skip_render
+        skip_render=args.skip_render,
+        engine=args.engine
     )
+

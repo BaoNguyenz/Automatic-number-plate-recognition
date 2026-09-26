@@ -12,7 +12,12 @@ from pathlib import Path
 # Set UTF-8 encoding for Windows terminal
 sys.stdout.reconfigure(encoding='utf-8')
 
-DB_PATH = Path("data/anpr.db")
+# Ensure project root is in sys.path
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+DB_PATH = ROOT / "data" / "anpr.db"
 
 def view_database():
     if not DB_PATH.exists():

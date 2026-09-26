@@ -17,3 +17,8 @@ sqlalchemy>=2.0.0
 pyyaml>=6.0
 pandas>=2.0.0
 scipy>=1.10.0
+
+# OCR Engines
+paddlepaddle>=3.0.0
+paddleocr>=3.0.0
+

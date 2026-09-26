@@ -68,14 +68,17 @@ Evaluated on 26 real-world test crops extracted from 4K traffic surveillance foo
 
 | Pipeline Engine | Preprocessing | Exact Match Accuracy (%) | Character-Level Accuracy (%) | Average Latency | Peak VRAM |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **EasyOCR (Baseline)** | Grayscale + Binary Thresholding (`thresh=64`) | **15.4%** (4/26) | 71.2% | **36.1 ms** | ~0.8 GB |
+| **EasyOCR (Baseline cũ)** | Grayscale + Binary Thresholding (`thresh=64`) | **15.4%** (4/26) | 71.2% | **36.1 ms** | ~0.8 GB |
+| **PaddleOCR (PP-OCRv6)** ⚡ | **Raw RGB Crop (Adaptive Predictor)** | **34.6% (9/26)** | **86.2%** | **~1.0 s (CPU)** | **~0.6 GB** |
 | **Qwen2-VL-2B (Zero-Shot)** | Raw RGB Crop (No thresholding) | **57.7%** (15/26) | 90.7% | 257.6 ms | **1.44 GB** |
 | **Qwen2-VL-2B (QLoRA 4-bit)** 🔥 | **Raw RGB Crop (No thresholding)** | **80.8% (21/26)** | **96.7%** | **380.4 ms** | **1.50 GB** |
 
 ### Key Benchmark Takeaways:
-1. **The Death of Binary Thresholding**: Rigid binary thresholding (`cv2.threshold`) severely degraded dark and overexposed characters (confusing `0/O`, `1/I`, `6/G`, `5/S`). Passing raw RGB crops directly to Qwen2-VL preserved fine stroke details.
-2. **QLoRA Advantage**: In just **88.2 seconds of fine-tuning** (~1.5 minutes) on an NVIDIA RTX 3060, the QLoRA adapter boosted exact-match recognition from **57.7% to 80.8% (+23.1%)** while boosting character-level accuracy to **96.7%**.
-3. **Best-Frame Selector Efficiency**: Rather than executing VLM inference on every single video frame (which would require 1,800 inferences per vehicle), the Best-Frame Selector pools candidate crops over time and invokes the VLM **exactly once per vehicle**, reducing total compute overhead by **>95%**.
+1. **PaddleOCR vs EasyOCR**: PaddleOCR (PP-OCRv6) more than doubles EasyOCR's exact-match rate (**15.4% ➡️ 34.6%**, +19.2%) and boosts character accuracy from **71.2% to 86.2%**. Crucially, PaddleOCR correctly identifies difficult targets like the critical stolen vehicle `SC56DYP` which EasyOCR completely failed on.
+2. **The Death of Binary Thresholding**: Rigid binary thresholding (`cv2.threshold`) severely degraded dark and overexposed characters (confusing `0/O`, `1/I`, `6/G`, `5/S`). Passing raw RGB crops directly preserved fine stroke details.
+3. **QLoRA Advantage**: In just **88.2 seconds of fine-tuning** (~1.5 minutes) on an NVIDIA RTX 3060, the QLoRA adapter boosted exact-match recognition from **57.7% to 80.8% (+23.1%)** while boosting character-level accuracy to **96.7%**.
+4. **Best-Frame Selector Efficiency**: Rather than executing OCR/VLM inference on every single video frame (which would require 1,800 inferences per vehicle), the Best-Frame Selector pools candidate crops over time and invokes recognition **exactly once per vehicle**, reducing total compute overhead by **>95%**.
+
 
 ---
 
@@ -117,6 +120,7 @@ Automatic-number-plate-recognition/
 │   │   └── tracker.py            # ByteTrack integration & Best-Frame Selector
 │   ├── recognition/
 │   │   ├── qwen2_vl_engine.py    # 4-bit Qwen2-VL engine with LoRA support
+│   │   ├── paddle_engine.py      # Ultra-fast PaddleOCR (PP-OCRv6) Engine
 │   │   └── postprocessor.py      # Text cleaning, regex & UK/EU plate validation
 │   └── utils/
 │       ├── storage.py            # WebP date-partitioned storage manager
@@ -126,7 +130,8 @@ Automatic-number-plate-recognition/
 │   ├── export_tensorrt.py        # TensorRT engine compilation script
 │   ├── prepare_finetune_data.py  # Conversational dataset extractor
 │   ├── finetune_qwen2_vl.py      # QLoRA fine-tuning script (PEFT 4-bit)
-│   ├── evaluate_finetune.py      # Benchmark comparison script
+│   ├── evaluate_finetune.py      # Qwen2-VL evaluation script
+│   ├── benchmark_paddleocr.py    # PaddleOCR 26-crop benchmark evaluation
 │   ├── run_pipeline.py           # End-to-end master execution pipeline
 │   └── view_db.py                # Terminal SQLite inspection tool
 ├── benchmark_crops/              # Verified human-labeled benchmark images & CSVs
@@ -158,14 +163,27 @@ python scripts/export_tensorrt.py
 ### 3. Run the Master Pipeline
 
 ```powershell
-# Process full video and render out.mp4
-python scripts/run_pipeline.py
+# Option A: Run pipeline with PaddleOCR Engine (Fast & Lightweight)
+python scripts/run_pipeline.py --engine paddleocr
 
-# Or test on the first 300 frames
+# Option B: Run pipeline with Fine-Tuned Qwen2-VL (Highest Accuracy 80.8%)
+python scripts/run_pipeline.py --engine qwen2_vl
+
+# Test on the first 300 frames
 python scripts/run_pipeline.py --max-frames 300
 ```
 
-### 4. Inspect Database & Alert Logs
+### 4. Run Model Benchmarks
+
+```powershell
+# Evaluate PaddleOCR on 26 ground-truth crops
+python scripts/benchmark_paddleocr.py
+
+# Evaluate Base vs QLoRA Qwen2-VL
+python scripts/evaluate_finetune.py
+```
+
+### 5. Inspect Database & Alert Logs
 
 ```powershell
 python scripts/view_db.py

@@ -23,7 +23,13 @@ vision:
   plate_conf: 0.25
   tracker: "bytetrack.yaml"
 
+recognition:
+  engine: "paddleocr" # Options: "paddleocr" or "qwen2_vl"
+  paddle_lang: "en"
+  paddle_use_angle_cls: false
+
 vlm:
   prompt: "Read the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
   max_new_tokens: 15
   temperature: 0.0
+

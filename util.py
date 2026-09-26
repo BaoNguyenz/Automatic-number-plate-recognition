@@ -1,9 +1,30 @@
+import os
 import string
-# pyrefly: ignore [missing-import]
-import easyocr
+import numpy as np
 
-# Initialize the OCR reader
-reader = easyocr.Reader(['en'], gpu=False)
+# 1. Pre-import torch to avoid Windows DLL collision with paddle/shm.dll
+try:
+    import torch
+except ImportError:
+    pass
+
+# 2. Configure Paddle environment flags
+os.environ["FLAGS_use_mkldnn"] = "0"
+os.environ["PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT"] = "0"
+os.environ["PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK"] = "True"
+
+# PaddleOCR initialization
+reader = None
+try:
+    from paddleocr import PaddleOCR
+    reader = PaddleOCR(lang='en', enable_mkldnn=False)
+except Exception:
+    try:
+        from paddleocr import PaddleOCR
+        reader = PaddleOCR(lang='en')
+    except Exception:
+        reader = None
+
 
 # Mapping dictionaries for character conversion
 dict_char_to_int = {'O': '0',
@@ -108,24 +129,61 @@ def format_license(text):
 
 def read_license_plate(license_plate_crop):
     """
-    Read the license plate text from the given cropped image.
+    Read the license plate text from the given cropped image using PaddleOCR.
 
     Args:
-        license_plate_crop (PIL.Image.Image): Cropped image containing the license plate.
+        license_plate_crop (PIL.Image.Image or np.ndarray): Cropped image containing the license plate.
 
     Returns:
         tuple: Tuple containing the formatted license plate text and its confidence score.
     """
+    global reader
+    if license_plate_crop is None:
+        return None, None
 
-    detections = reader.readtext(license_plate_crop)
+    if reader is None:
+        try:
+            from paddleocr import PaddleOCR
+            reader = PaddleOCR(lang='en', enable_mkldnn=False)
+        except Exception:
+            return None, None
 
-    for detection in detections:
-        bbox, text, score = detection
+    if not isinstance(license_plate_crop, np.ndarray):
+        license_plate_crop = np.array(license_plate_crop)
 
-        text = text.upper().replace(' ', '')
+    try:
+        pred_res = reader.predict(license_plate_crop)
+    except Exception:
+        return None, None
 
+    if not pred_res:
+        return None, None
+
+    first = pred_res[0]
+    detected_pairs = []
+    if isinstance(first, dict):
+        texts = first.get("rec_texts", [])
+        scores = first.get("rec_scores", [])
+        for t, s in zip(texts, scores):
+            detected_pairs.append((str(t), float(s)))
+    elif isinstance(first, list):
+        for item in first:
+            if item and len(item) >= 2:
+                detected_pairs.append((str(item[1][0]), float(item[1][1])))
+
+    # 1. Check individual lines
+    for raw_t, score in detected_pairs:
+        text = raw_t.upper().replace(' ', '')
+        text = ''.join(c for c in text if c.isalnum())
         if license_complies_format(text):
-            return format_license(text), score
+            return format_license(text), float(score)
+
+    # 2. Check concatenated text (in case plate characters were segmented across boxes)
+    joined_text = ''.join(p[0].upper().replace(' ', '') for p in detected_pairs)
+    joined_text = ''.join(c for c in joined_text if c.isalnum())
+    if license_complies_format(joined_text):
+        avg_score = float(np.mean([p[1] for p in detected_pairs])) if detected_pairs else 0.5
+        return format_license(joined_text), avg_score
 
     return None, None
 
