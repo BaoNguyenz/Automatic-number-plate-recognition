@@ -35,29 +35,81 @@
 
 ```mermaid
 graph TD
-    A["Raw UHD Video Stream (3840x2160 @ 30FPS)"] --> B["TensorRT FP16 Vehicle Detector (YOLOv8n @ 2.4ms)"]
-    A --> C["TensorRT FP16 License Plate Detector (@ 2.7ms)"]
-    
-    B --> D["ByteTrack Multi-Object Tracker (Persistent Car IDs)"]
-    C --> E["Spatial Vehicle-Plate Association (Containment & IoU)"]
+    %% 1. INPUT LAYER
+    subgraph S1["1. Input Stream"]
+        A["UHD Video Stream 3840x2160 @ 30FPS"]
+    end
+
+    %% 2. TENSORRT INFERENCE
+    subgraph S2["2. TensorRT FP16 Detection"]
+        B["Vehicle Detector (yolov8n.engine - 2.4ms)"]
+        C["Plate Detector (license_plate.engine - 2.7ms)"]
+    end
+
+    %% 3. TRACKING & QUALITY FILTER
+    subgraph S3["3. Tracking & Best-Frame Selector"]
+        D["ByteTrack Multi-Object Tracker"]
+        E["Spatial Association (IoU & Containment)"]
+        F["Best-Frame Quality Scorer (Laplacian + Scale)"]
+        G["Optimal Plate Crop (1 Best Crop / Vehicle)"]
+    end
+
+    %% 4. DUAL RECOGNITION ENGINES
+    subgraph S4["4. Dual Modular Recognition Engine"]
+        H1["Option 1: Qwen2-VL-2B QLoRA (Exact Match 80.8%)"]
+        H2["Option 2: PaddleOCR PP-OCRv6 (Exact Match 34.6%)"]
+        I["PlatePostProcessor (Regex & UK/EU Validation)"]
+    end
+
+    %% 5. STORAGE & DATABASE
+    subgraph S5["5. Database & Edge Storage"]
+        J["SQLAlchemy ORM (SQLite / PostgreSQL)"]
+        K["WebP Storage Manager (1.5 KB / Plate)"]
+    end
+
+    %% 6. SECURITY WATCHLIST
+    subgraph S6["6. Security Watchlist Interceptor"]
+        L{"Watchlist Matcher"}
+        M1["CRITICAL ALERT (Stolen Vehicle: SC56DYP)"]
+        M2["WARNING ALERT (Toll Violator: EY61NBG)"]
+        M3["Standard Traffic Record"]
+    end
+
+    %% 7. VIDEO PRODUCTION
+    subgraph S7["7. Render & Output"]
+        N["Trajectory Interpolator (Gap-Filling)"]
+        O["Executive Video Visualizer"]
+        P["Final Output Video (out.mp4)"]
+    end
+
+    %% CLEAN PIPELINE FLOW
+    A --> B
+    A --> C
+    B --> D
+    C --> E
     D --> E
-    
-    E --> F["Best-Frame Selector Pool"]
-    F -- "Quality Scoring: S = Conf * sqrt(Area) * ln(1 + LapVar)" --> G["Single Optimal RGB Crop per Vehicle"]
-    
-    G --> H["Fine-Tuned Qwen2-VL-2B-Instruct (4-bit QLoRA)"]
-    H --> I["PlatePostProcessor (Regex & Format Normalization)"]
-    
-    I --> J["SQLAlchemy ORM (SQLite / PostgreSQL)"]
-    I --> K["WebP Lossless Storage Manager (media/plates/YYYY/MM/DD/)"]
-    I --> L{"Security Watchlist Interceptor"}
-    
-    L -- "Matched (Stolen / Toll Evasion)" --> M["🚨 Real-Time Security Alert (Terminal HUD & Flashing Video Banner)"]
-    L -- "Normal" --> N["Standard Vehicle Log"]
-    
-    E --> O["Trajectory Interpolator (Gap Filling & Smoothing)"]
-    O --> P["Executive Video Visualizer (Corner Accents, UK Badges, Top HUD)"]
-    P --> Q["Final Production Video (out.mp4)"]
+    E --> F
+    F --> G
+
+    G --> H1
+    G --> H2
+    H1 --> I
+    H2 --> I
+
+    I --> J
+    I --> K
+    I --> L
+
+    L --> M1
+    L --> M2
+    L --> M3
+
+    E --> N
+    N --> O
+    M1 --> O
+    M2 --> O
+    O --> P
+
 ```
 
 ---

@@ -12,10 +12,14 @@ import time
 from pathlib import Path
 from typing import List, Tuple
 
+# pyrefly: ignore [missing-import]
 import torch
 from PIL import Image
+# pyrefly: ignore [missing-import]
 from transformers import Qwen2VLForConditionalGeneration, AutoProcessor
+# pyrefly: ignore [missing-import]
 from qwen_vl_utils import process_vision_info
+# pyrefly: ignore [missing-import]
 from peft import PeftModel
 
 # UTF-8 stdout
