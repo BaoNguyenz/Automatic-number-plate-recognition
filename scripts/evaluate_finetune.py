@@ -30,7 +30,8 @@ from src.recognition.postprocessor import PlatePostProcessor
 
 MODEL_ID = "unsloth/Qwen2-VL-2B-Instruct-bnb-4bit"
 PROCESSOR_ID = "Qwen/Qwen2-VL-2B-Instruct"
-LORA_DIR = Path("Weight/qwen2_vl_lora_plate")
+LORA_DIR = ROOT / "Weight" / "qwen2_vl_lora_plate"
+BENCHMARK_DIR = ROOT / "benchmark_crops"
 PROMPT = (
     "Read the vehicle license plate number shown in this cropped image. "
     "Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
@@ -103,7 +104,7 @@ def evaluate_model(model, processor, crops: List[Path], model_label: str):
     return exact_acc, avg_char_acc
 
 def main():
-    crops = sorted(list(Path("benchmark_crops").glob("*.jpg")))
+    crops = sorted(list(BENCHMARK_DIR.glob("*.jpg")))
     if not crops:
         print("[-] Không tìm thấy ảnh trong benchmark_crops/")
         return

@@ -31,8 +31,8 @@ if str(ROOT) not in sys.path:
 
 MODEL_ID = "unsloth/Qwen2-VL-2B-Instruct-bnb-4bit"
 PROCESSOR_ID = "Qwen/Qwen2-VL-2B-Instruct"
-DATA_DIR = Path("data/finetune_dataset")
-OUTPUT_DIR = Path("Weight/qwen2_vl_lora_plate")
+DATA_DIR = ROOT / "data" / "finetune_dataset"
+OUTPUT_DIR = ROOT / "Weight" / "qwen2_vl_lora_plate"
 
 BATCH_SIZE = 2
 GRAD_ACCUM_STEPS = 2

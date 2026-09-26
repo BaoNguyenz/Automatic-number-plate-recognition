@@ -21,10 +21,11 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-VIDEO_PATH = Path("2103099-uhd_3840_2160_30fps.mp4")
-CSV_PATH = Path("Csv_results/test_interpolated.csv")
-OUTPUT_DIR = Path("data/finetune_dataset")
+VIDEO_PATH = ROOT / "2103099-uhd_3840_2160_30fps.mp4"
+CSV_PATH = ROOT / "Csv_results" / "test_interpolated.csv"
+OUTPUT_DIR = ROOT / "data" / "finetune_dataset"
 IMAGES_DIR = OUTPUT_DIR / "images"
+BENCHMARK_DIR = ROOT / "benchmark_crops"
 
 PROMPT = (
     "Read the vehicle license plate number shown in this cropped image. "
@@ -59,7 +60,7 @@ def prepare_dataset(max_video_frames: int = 500):
     sample_idx = 0
 
     # 1. Incorporate verified benchmark crops first
-    benchmark_crops = list(Path("benchmark_crops").glob("*.jpg"))
+    benchmark_crops = list(BENCHMARK_DIR.glob("*.jpg"))
     print(f"[+] Incorporating {len(benchmark_crops)} verified benchmark crops...", flush=True)
     for b_crop in benchmark_crops:
         parts = b_crop.stem.split("_")
