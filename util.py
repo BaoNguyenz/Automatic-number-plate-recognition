@@ -1,4 +1,5 @@
 import string
+# pyrefly: ignore [missing-import]
 import easyocr
 
 # Initialize the OCR reader

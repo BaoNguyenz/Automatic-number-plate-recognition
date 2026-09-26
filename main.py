@@ -1,4 +1,6 @@
+# pyrefly: ignore [missing-import]
 from ultralytics import YOLO
+# pyrefly: ignore [missing-import]
 import cv2
 import os
 
