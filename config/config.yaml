@@ -1,0 +1,29 @@
+system:
+  device: "cuda:0"
+  seed: 3407
+
+paths:
+  input_video: "2103099-uhd_3840_2160_30fps.mp4"
+  output_video: "out.mp4"
+  csv_output: "Csv_results/results.csv"
+  media_dir: "media/plates"
+  coco_model: "Weight/yolov8n.pt"
+  coco_engine: "Weight/yolov8n.engine"
+  plate_model: "Weight/license_plate_detector.pt"
+  plate_engine: "Weight/license_plate_detector.engine"
+  vlm_model_id: "unsloth/Qwen2-VL-2B-Instruct-bnb-4bit"
+  vlm_lora_dir: "Weight/qwen2_vl_lora_plate"
+
+database:
+  url: "sqlite:///data/anpr.db"
+
+vision:
+  vehicle_classes: [2, 3, 5, 7] # COCO: car, motorcycle, bus, truck
+  vehicle_conf: 0.35
+  plate_conf: 0.25
+  tracker: "bytetrack.yaml"
+
+vlm:
+  prompt: "Read the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+  max_new_tokens: 15
+  temperature: 0.0

@@ -5,3 +5,8 @@ Licence_plate_detection
 __pycache__
 sort/
 trial.ipynb
+Weight/
+*.engine
+*.onnx
+data/*.db
+media/
