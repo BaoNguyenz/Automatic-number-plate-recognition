@@ -22,7 +22,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 VIDEO_PATH = ROOT / "2103099-uhd_3840_2160_30fps.mp4"
-CSV_PATH = ROOT / "Csv_results" / "test_interpolated.csv"
+CSV_PATH = ROOT / "data" / "test_interpolated.csv"
 OUTPUT_DIR = ROOT / "data" / "finetune_dataset"
 IMAGES_DIR = OUTPUT_DIR / "images"
 BENCHMARK_DIR = ROOT / "benchmark_crops"
