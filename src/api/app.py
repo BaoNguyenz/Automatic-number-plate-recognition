@@ -649,12 +649,17 @@ def _run_video_job(job_id: str, video_path: str, max_frames: int, engine_name: s
 @app.get("/videos/{video_name}")
 async def serve_video(video_name: str):
     """Streams video file supporting HTML5 range seeking."""
-    p1 = ROOT / video_name
+    if video_name in ["out.mp4", "annotated_sample.mp4"]:
+        annotated_sample = ROOT / "media" / "annotated_sample.mp4"
+        if annotated_sample.exists() and annotated_sample.is_file():
+            return FileResponse(path=str(annotated_sample), media_type="video/mp4")
+
     p2 = ROOT / "media" / video_name
-    if p1.exists() and p1.is_file():
-        target = p1
-    elif p2.exists() and p2.is_file():
+    p1 = ROOT / video_name
+    if p2.exists() and p2.is_file():
         target = p2
+    elif p1.exists() and p1.is_file():
+        target = p1
     else:
         raise HTTPException(status_code=404, detail=f"Video file '{video_name}' not found")
 

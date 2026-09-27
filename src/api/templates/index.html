@@ -258,16 +258,16 @@
           <div class="bg-surface-container-low rounded-xl p-4 border border-border-subtle shadow-lg space-y-3">
             <div class="flex items-center justify-between flex-wrap gap-2">
               <div class="flex items-center gap-2 flex-wrap">
-                <!-- Button 1: Play 2103099 Video -->
-                <button onclick="loadVideoToHUD('/videos/2103099-uhd_3840_2160_30fps.mp4', '2103099-uhd_3840_2160_30fps.mp4')" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-primary font-mono text-xs font-bold border border-primary/40 flex items-center gap-1.5 shadow-sm transition-all" title="Click to stream source 4K video directly in canvas">
-                  <span class="material-symbols-outlined text-xs">play_circle</span>
-                  <span id="active-file-label" class="truncate max-w-[210px]">2103099-uhd_3840_2160_30fps.mp4</span>
+                <!-- Button 1: Play Annotated Video (Primary Action) -->
+                <button onclick="loadVideoToHUD('/videos/annotated_sample.mp4', 'Annotated Surveillance Video')" class="px-3.5 py-1.5 rounded-lg bg-tertiary/20 hover:bg-tertiary/30 text-tertiary font-mono text-xs font-bold border border-tertiary/50 flex items-center gap-1.5 shadow-[0_0_12px_rgba(78,222,163,0.3)] transition-all cursor-pointer" title="Phát video đã nhận diện (có Bounding Box, Bảng HUD & Tracking)">
+                  <span class="material-symbols-outlined text-sm">smart_display</span>
+                  <span>▶ PHÁT VIDEO ĐÃ NHẬN DIỆN</span>
                 </button>
 
-                <!-- Button 2: Play Annotated Video -->
-                <button onclick="loadVideoToHUD('/videos/out.mp4', 'out.mp4 (Annotated Video)')" class="px-2.5 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-tertiary font-mono text-xs font-bold border border-tertiary/40 flex items-center gap-1 transition-all" title="Play annotated output video with bounding boxes & telemetry">
-                  <span class="material-symbols-outlined text-xs">smart_display</span>
-                  <span>Play Annotated (out.mp4)</span>
+                <!-- Button 2: Play 2103099 Raw Video -->
+                <button onclick="loadVideoToHUD('/videos/2103099-uhd_3840_2160_30fps.mp4', '2103099-uhd_3840_2160_30fps.mp4')" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-primary font-mono text-xs font-semibold border border-primary/30 flex items-center gap-1.5 shadow-sm transition-all cursor-pointer" title="Xem video gốc 4K (chưa vẽ đè)">
+                  <span class="material-symbols-outlined text-xs">play_circle</span>
+                  <span>Video Gốc 4K</span>
                 </button>
                 
                 <!-- Quick Benchmark Sample Dropdown -->
@@ -291,7 +291,13 @@
                   <span>INPUT: <strong class="text-on-surface font-semibold" id="input-stats-dim">UHD 4K / H.264 (30 FPS)</strong></span>
                   <span>STATUS: <strong class="text-tertiary font-semibold" id="pipeline-status">READY FOR INFERENCE</strong></span>
                 </div>
-                <span class="text-tertiary font-bold" id="progress-percent-label">100% COMPLETE</span>
+                <div class="flex items-center gap-2">
+                  <button onclick="loadVideoToHUD('/videos/annotated_sample.mp4', 'Annotated Surveillance Video')" class="text-primary hover:underline font-mono text-xs font-bold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs">movie</span>
+                    <span>Xem Video Ngay</span>
+                  </button>
+                  <span class="text-tertiary font-bold" id="progress-percent-label">100% COMPLETE</span>
+                </div>
               </div>
               <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
                 <div id="pipeline-progress-bar" class="bg-gradient-to-r from-primary via-tertiary to-primary-container h-full w-full rounded-full shadow-[0_0_12px_rgba(78,222,163,0.5)] transition-all duration-300"></div>
@@ -302,9 +308,17 @@
           <!-- Tactical HUD Canvas (16:9) -->
           <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-border-subtle shadow-2xl group select-none flex items-center justify-center">
             
+            <!-- Quick Button when image is shown -->
+            <div id="switch-to-video-btn" class="absolute top-14 left-4 z-30 hidden">
+              <button onclick="loadVideoToHUD('/videos/annotated_sample.mp4', 'Annotated Surveillance Video')" class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-mono text-xs font-bold shadow-2xl flex items-center gap-1.5 transition-all">
+                <span class="material-symbols-outlined text-sm">movie</span>
+                <span>Chuyển Sang Xem Video (Tracking)</span>
+              </button>
+            </div>
+
             <!-- Canvas Display Image / Video -->
             <img id="hud-display-image" src="" alt="ANPR HUD Canvas" class="hidden w-full h-full object-contain filter brightness-95 contrast-105"/>
-            <video id="hud-display-video" controls playsinline class="hidden w-full h-full object-contain bg-black" ontimeupdate="handleVideoTimeUpdate(this)"></video>
+            <video id="hud-display-video" controls playsinline autoplay muted loop class="hidden w-full h-full object-contain bg-black" ontimeupdate="handleVideoTimeUpdate(this)"></video>
 
             <!-- Default Placeholder if no media loaded -->
             <div id="hud-placeholder" class="flex flex-col items-center justify-center p-8 text-center space-y-3">
@@ -313,16 +327,16 @@
               </div>
               <div class="flex flex-col">
                 <span class="font-mono text-sm font-bold text-on-surface tracking-wider">TACTICAL VIDEO STREAM READY</span>
-                <span class="text-xs text-on-surface-muted max-w-md pt-1">Click the button below to stream the 4K surveillance video directly in this tactical HUD player.</span>
+                <span class="text-xs text-on-surface-muted max-w-md pt-1">Nhấn nút bên dưới để phát video giám sát 4K kèm tính năng tự động nhận diện và tracking xe.</span>
               </div>
               <div class="flex items-center gap-3 pt-2">
-                <button onclick="loadVideoToHUD('/videos/2103099-uhd_3840_2160_30fps.mp4', '2103099-uhd_3840_2160_30fps.mp4')" class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-mono text-xs font-bold glow-cyan transition-all flex items-center gap-1.5 shadow-lg">
-                  <span class="material-symbols-outlined text-sm">play_arrow</span>
-                  <span>Play 2103099 4K Video in Canvas</span>
-                </button>
-                <button onclick="loadVideoToHUD('/videos/out.mp4', 'out.mp4 (Annotated Video)')" class="px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-tertiary font-mono text-xs font-semibold border border-tertiary/40 transition-all flex items-center gap-1.5">
+                <button onclick="loadVideoToHUD('/videos/annotated_sample.mp4', 'Annotated Surveillance Video')" class="px-4 py-2 rounded-lg bg-tertiary hover:bg-tertiary-container text-black font-mono text-xs font-bold transition-all flex items-center gap-1.5 shadow-lg cursor-pointer">
                   <span class="material-symbols-outlined text-sm">smart_display</span>
-                  <span>Play Annotated Video</span>
+                  <span>Phát Video Đã Nhận Diện (Annotated)</span>
+                </button>
+                <button onclick="loadVideoToHUD('/videos/2103099-uhd_3840_2160_30fps.mp4', '2103099-uhd_3840_2160_30fps.mp4')" class="px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-primary font-mono text-xs font-semibold border border-primary/40 transition-all flex items-center gap-1.5 cursor-pointer">
+                  <span class="material-symbols-outlined text-sm">play_arrow</span>
+                  <span>Phát Video Gốc 4K</span>
                 </button>
               </div>
             </div>
@@ -767,7 +781,9 @@
       const displayImg = document.getElementById('hud-display-image');
       const placeholder = document.getElementById('hud-placeholder');
       const videoEl = document.getElementById('hud-display-video');
+      const switchBtn = document.getElementById('switch-to-video-btn');
 
+      if (switchBtn) switchBtn.classList.remove('hidden');
       videoEl.classList.add('hidden');
       placeholder.classList.add('hidden');
       displayImg.src = result.annotated_image;
@@ -792,6 +808,14 @@
         document.getElementById('detail-confidence').innerText = `${Math.round(primary.plate_conf * 100)}%`;
         document.getElementById('detail-latency').innerText = `${primary.ocr_latency_ms} ms`;
 
+        // Update crop preview
+        const cropBox = document.getElementById('inspector-crop-container');
+        const cropImg = document.getElementById('inspector-crop-img');
+        if (cropBox && cropImg && currentSelectedCropUrl) {
+          cropImg.src = currentSelectedCropUrl;
+          cropBox.classList.remove('hidden');
+        }
+
         const accentBar = document.getElementById('inspector-accent-bar');
         const statusIcon = document.getElementById('inspector-status-icon');
         const statusTitle = document.getElementById('inspector-status-title');
@@ -801,7 +825,6 @@
         const plateBadge = document.getElementById('plate-badge');
 
         if (primary.is_watchlist_match) {
-          // Critical Alert styling
           accentBar.className = 'absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-alert-crimson via-red-500 to-alert-crimson animate-pulse';
           statusIcon.className = 'p-1 rounded bg-alert-crimson/20 text-alert-crimson flex items-center justify-center animate-pulse';
           statusTitle.className = 'font-mono text-xs text-alert-crimson font-bold uppercase tracking-wider';
@@ -815,12 +838,11 @@
           
           playAlertChime();
         } else {
-          // Standard compliance styling
           accentBar.className = 'absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-container to-primary';
           statusIcon.className = 'p-1 rounded bg-primary/20 text-primary flex items-center justify-center';
           statusTitle.className = 'font-mono text-xs text-primary font-bold uppercase tracking-wider';
-          statusTitle.innerText = 'VEHICLE INSPECTOR';
-          statusSub.innerText = 'STANDARD AUTHORIZED READ';
+          statusTitle.innerText = 'AUTO TRACKING MONITOR';
+          statusSub.innerText = 'INSPECTION LOCKED';
           flagBox.classList.add('hidden');
           dispatchBtn.className = 'flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-mono text-xs font-bold transition-all shadow-md';
           document.getElementById('btn-dispatch-text').innerText = 'Log Verified Read';
@@ -844,7 +866,9 @@
       const videoEl = document.getElementById('hud-display-video');
       const displayImg = document.getElementById('hud-display-image');
       const placeholder = document.getElementById('hud-placeholder');
+      const switchBtn = document.getElementById('switch-to-video-btn');
 
+      if (switchBtn) switchBtn.classList.add('hidden');
       displayImg.classList.add('hidden');
       placeholder.classList.add('hidden');
       videoEl.classList.remove('hidden');
@@ -853,9 +877,9 @@
         videoEl.src = videoUrl;
         videoEl.load();
       }
-      videoEl.play().catch(e => console.log('Autoplay waiting for user interaction:', e));
+      videoEl.muted = true; // Essential for autoplay without browser blocking!
+      videoEl.play().catch(e => console.log('Autoplay handled:', e));
 
-      document.getElementById('active-file-label').innerText = title || 'Active Video';
       document.getElementById('pipeline-status').innerText = 'STREAMING VIDEO (HTML5)';
       document.getElementById('hud-timestamp').innerText = 'LIVE VIDEO PLAYBACK';
     }
@@ -1255,6 +1279,10 @@
       fetchSystemStatus();
       populateSamples();
       fetchDetections();
+      // Tự động phát video đã nhận diện ngay khi mở web
+      setTimeout(() => {
+        loadVideoToHUD('/videos/annotated_sample.mp4', 'Annotated Surveillance Video');
+      }, 300);
     });
   </script>
 </body>
