@@ -4,7 +4,7 @@
 # ==============================================================================
 FROM pytorch/pytorch:2.4.0-cuda12.4-cudnn9-runtime
 
-LABEL maintainer="BaoNguyen <baonguyen@example.com>"
+LABEL maintainer="BaoNguyen <baohuulenguyen@gmail.com>"
 LABEL description="Automatic Number Plate Recognition (ANPR) System with TensorRT, ByteTrack, PaddleOCR & Qwen2-VL"
 
 # Prevent interactive prompts during apt install
