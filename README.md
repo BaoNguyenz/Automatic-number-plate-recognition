@@ -243,6 +243,41 @@ python scripts/view_db.py
 
 ---
 
+## 🐳 Docker & Docker Compose Deployment (NVIDIA GPU)
+
+The entire ANPR system can be deployed in a single command using Docker Compose with full GPU passthrough:
+
+### 1. Prerequisites
+- [Docker Engine](https://docs.docker.com/engine/install/) & [Docker Compose v2](https://docs.docker.com/compose/)
+- [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) (for GPU acceleration)
+
+### 2. Launch System via Docker Compose
+
+```bash
+# Build the production image
+docker compose build
+
+# Start the Web Dashboard & API in background
+docker compose up -d
+
+# View live container logs
+docker compose logs -f
+```
+
+Open `http://localhost:8000` in your browser to access the Tactical ANPR Dashboard.
+
+### 3. Run Offline CLI Tasks in Container
+
+```bash
+# Run PaddleOCR benchmark inside container
+docker compose --profile tools run --rm anpr-cli scripts/benchmark_paddleocr.py
+
+# Run master pipeline inside container
+docker compose --profile tools run --rm anpr-cli scripts/run_pipeline.py --video 2103099-uhd_3840_2160_30fps.mp4
+```
+
+---
+
 ## 💼 STAR Interview & Portfolio Summary
 
 > **Situation:** An existing ANPR codebase relied on fragile OpenCV binary thresholding, slow SORT tracking, and inaccurate EasyOCR, achieving only 15.4% exact-match accuracy on real-world 4K surveillance footage.
