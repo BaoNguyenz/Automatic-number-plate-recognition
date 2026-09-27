@@ -4,7 +4,8 @@ Cleans raw VLM text outputs and enforces formatting rules.
 """
 
 import re
-from typing import Dict, Any, Optional
+from typing import Dict, Any
+
 
 
 class PlatePostProcessor:

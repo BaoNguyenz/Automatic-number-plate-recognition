@@ -10,7 +10,8 @@ import sys
 import glob
 import time
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
+
 
 # pyrefly: ignore [missing-import]
 import torch

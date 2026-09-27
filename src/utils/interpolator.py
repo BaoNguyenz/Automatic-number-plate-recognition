@@ -3,7 +3,8 @@ Trajectory and Bounding Box Interpolator Module.
 Fills missing detection gaps for smoothly moving vehicles and plate coordinates.
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
+
 import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d

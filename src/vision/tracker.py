@@ -3,13 +3,14 @@ Vehicle Tracker and Best-Frame Selector Module.
 Maintains persistent car_id trajectories and selects the optimal license plate crop for VLM recognition.
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Tuple
 import cv2
 import numpy as np
 from ultralytics import YOLO
 
-from src.vision.detector import DetectionBox, VehiclePlateDetector
+from src.vision.detector import VehiclePlateDetector
+
 
 
 @dataclass

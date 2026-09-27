@@ -12,8 +12,8 @@ import sys
 import json
 import time
 from pathlib import Path
-from typing import List, Dict, Any
 from PIL import Image
+
 
 import torch
 from torch.utils.data import Dataset, DataLoader

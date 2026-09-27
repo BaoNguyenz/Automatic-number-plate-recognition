@@ -5,8 +5,8 @@ Tests TensorRT Vehicle/Plate Detector and ByteTrack Best-Frame Selector on video
 
 import sys
 import cv2
-import numpy as np
 from pathlib import Path
+
 
 # UTF-8 stdout
 sys.stdout.reconfigure(encoding='utf-8')

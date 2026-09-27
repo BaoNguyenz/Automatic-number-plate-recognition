@@ -4,8 +4,8 @@ Tests Qwen2VLEngine and PlatePostProcessor on benchmark license plate crops.
 """
 
 import sys
-import glob
 from pathlib import Path
+
 
 # UTF-8 stdout
 sys.stdout.reconfigure(encoding='utf-8')

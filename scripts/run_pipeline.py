@@ -11,7 +11,7 @@ import sys
 import time
 import argparse
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, Any, Optional
 
 import cv2
 import yaml
@@ -27,8 +27,9 @@ if str(ROOT) not in sys.path:
 
 from src.database.connection import DatabaseManager
 from src.vision import VehiclePlateDetector, BestFrameTracker, TrackedVehicle
-from src.recognition import Qwen2VLEngine, PaddleOCREngine, PlatePostProcessor
+from src.recognition import Qwen2VLEngine, PaddleOCREngine
 from src.utils import PlateStorageManager, TrajectoryInterpolator, ANPRVisualizer
+
 
 
 def load_config(config_path: Path) -> Dict[str, Any]:

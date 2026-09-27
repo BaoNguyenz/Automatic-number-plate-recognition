@@ -21,7 +21,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.recognition.paddle_engine import PaddleOCREngine
-from src.recognition.postprocessor import PlatePostProcessor
+
 
 
 def compute_char_acc(pred: str, gt: str) -> float:
