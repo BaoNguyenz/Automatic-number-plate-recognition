@@ -250,12 +250,19 @@ async def get_detections(
         elif filter_type == "high_conf":
             query = query.filter(VehicleDetection.confidence_score >= 0.90)
 
-        query = query.order_by(VehicleDetection.detected_at.desc())
+        query = query.order_by(VehicleDetection.frame_number.asc())
         total = query.count()
         results = query.offset(offset).limit(limit).all()
 
         data = []
         for r in results:
+            fn = r.frame_number or 0
+            if fn > 0:
+                tot_sec = fn / 30.0
+                v_time = f"{int(tot_sec // 60):02d}:{int(tot_sec % 60):02d}"
+            else:
+                v_time = "IMG"
+
             data.append({
                 "id": r.id,
                 "car_id": r.car_id,
@@ -264,14 +271,15 @@ async def get_detections(
                 "confidence_score": round(r.confidence_score or 0.0, 3),
                 "vehicle_type": r.vehicle_type,
                 "vehicle_color": r.vehicle_color,
-                "frame_number": r.frame_number,
+                "frame_number": fn,
+                "video_timestamp": v_time,
                 "plate_crop_path": r.plate_crop_path,
                 "detected_at": r.detected_at.strftime("%Y-%m-%d %H:%M:%S") if r.detected_at else "",
                 "is_watchlist_match": bool(r.is_watchlist_match),
                 "watchlist_reason": r.watchlist_reason
             })
 
-    return {"total": total, "detections": data}
+        return {"total": total, "detections": data}
 
 
 @app.get("/api/watchlist")
@@ -574,28 +582,68 @@ async def analyze_image(
 # ---------------------------------------------------------
 def _run_video_job(job_id: str, video_path: str, max_frames: int, engine_name: str):
     """Background worker executing the video pipeline and reporting frame-by-frame status."""
+    import subprocess
     from scripts.run_pipeline import run_pipeline
 
     job = engine_mgr.jobs[job_id]
     job["status"] = "processing"
     job["start_time"] = time.time()
 
+    raw_output_name = f"raw_{job_id}.mp4"
+    web_output_name = f"annotated_{job_id}.mp4"
+    raw_output_path = ROOT / "media" / raw_output_name
+    web_output_path = ROOT / "media" / web_output_name
+
     try:
-        run_pipeline(
+        pipeline_res = run_pipeline(
             video_path=video_path,
+            output_path=str(raw_output_path.relative_to(ROOT)),
             max_frames=max_frames,
             engine=engine_name,
-            skip_render=True
+            skip_render=False
         )
+
+        job["tracks"] = pipeline_res.get("tracks", []) if pipeline_res else []
+
+        # Convert raw_output_path (OpenCV mp4v) to H.264 (avc1) for native browser playback
+        if raw_output_path.exists():
+            try:
+                import imageio_ffmpeg
+                ffmpeg_exe = imageio_ffmpeg.get_ffmpeg_exe()
+            except Exception:
+                ffmpeg_exe = "ffmpeg"
+
+            cmd = [
+                ffmpeg_exe,
+                "-y",
+                "-i", str(raw_output_path),
+                "-c:v", "libx264",
+                "-preset", "ultrafast",
+                "-crf", "23",
+                "-pix_fmt", "yuv420p",
+                "-movflags", "+faststart",
+                str(web_output_path)
+            ]
+            subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            job["annotated_video_url"] = f"/videos/{web_output_name}"
+            try:
+                raw_output_path.unlink()
+            except Exception:
+                pass
+        else:
+            if (ROOT / "media" / "annotated_sample.mp4").exists():
+                job["annotated_video_url"] = "/videos/annotated_sample.mp4"
+
         job["status"] = "completed"
         job["progress_percent"] = 100
         job["duration_s"] = round(time.time() - job["start_time"], 2)
         job["video_url"] = f"/videos/{Path(video_path).name}"
-        if (ROOT / "out.mp4").exists():
-            job["annotated_video_url"] = "/videos/out.mp4"
+
     except Exception as e:
         job["status"] = "failed"
         job["error"] = str(e)
+        import traceback
+        traceback.print_exc()
 
 
 @app.get("/videos/{video_name}")

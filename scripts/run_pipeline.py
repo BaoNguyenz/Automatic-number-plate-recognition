@@ -215,11 +215,32 @@ def run_pipeline(
     cap.release()
 
     # ---------------------------------------------------------
+    tracks_data = [
+        {
+            "car_id": t.car_id,
+            "start_frame": t.first_frame,
+            "end_frame": t.last_frame,
+            "best_frame": t.best_crop_frame,
+            "plate_number": vehicle_records[t.car_id].get("plate_number") if t.car_id in vehicle_records else (t.plate_text or "UNKNOWN"),
+            "vehicle_type": vehicle_records[t.car_id].get("vehicle_type") if t.car_id in vehicle_records else t.vehicle_type,
+            "is_watchlist": vehicle_records[t.car_id].get("is_watchlist") if t.car_id in vehicle_records else False,
+            "alert_level": vehicle_records[t.car_id].get("alert_level") if t.car_id in vehicle_records else "NORMAL",
+            "watchlist_reason": vehicle_records[t.car_id].get("watchlist_reason") if t.car_id in vehicle_records else None,
+            "crop_path": vehicle_records[t.car_id].get("crop_path") if t.car_id in vehicle_records else None
+        }
+        for t in tracker.tracks.values()
+    ]
+
     # PHASE 2: Video Rendering with Modern UI Overlays
     # ---------------------------------------------------------
     if skip_render:
         print("\n[i] Bỏ qua bước Render Video (--skip-render).")
-        return
+        return {
+            "output_video": None,
+            "total_vehicles": len(tracker.tracks),
+            "total_recognized": len(vehicle_records),
+            "tracks": tracks_data
+        }
 
     print("\n" + "=" * 85)
     print(f"🎬 GIAI ĐOẠN 2: RENDER VIDEO THÀNH PHẨM ({output_video.name})")
@@ -300,6 +321,13 @@ def run_pipeline(
     print(f"  • Kho ảnh WebP:        media/plates/")
     print(f"  • Tổng thời gian chạy: {total_time:.1f}s ({total_time/60:.1f} phút)")
     print("=" * 85)
+
+    return {
+        "output_video": str(output_video),
+        "total_vehicles": len(tracker.tracks),
+        "total_recognized": len(vehicle_records),
+        "tracks": tracks_data
+    }
 
 
 if __name__ == "__main__":

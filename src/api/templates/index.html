@@ -391,11 +391,17 @@
             <div class="flex items-center justify-between pt-1">
               <div class="flex items-center gap-2">
                 <span id="inspector-status-icon" class="p-1 rounded bg-primary/20 text-primary flex items-center justify-center">
-                  <span class="material-symbols-outlined text-sm font-bold">directions_car</span>
+                  <span class="material-symbols-outlined text-sm font-bold">radar</span>
                 </span>
                 <div class="flex flex-col">
-                  <span id="inspector-status-title" class="font-mono text-xs text-primary font-bold uppercase tracking-wider">VEHICLE INSPECTOR</span>
-                  <span id="inspector-status-sub" class="font-mono text-[10px] text-on-surface-muted">REAL-TIME TELEMETRY</span>
+                  <div class="flex items-center gap-1.5">
+                    <span id="inspector-status-title" class="font-mono text-xs text-primary font-bold uppercase tracking-wider">AUTO TRACKING MONITOR</span>
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+                    </span>
+                  </div>
+                  <span id="inspector-status-sub" class="font-mono text-[10px] text-on-surface-muted">SYNCHRONIZED WITH VIDEO TIMELINE</span>
                 </div>
               </div>
               <span id="inspector-frame-badge" class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[10px] border border-border-subtle">
@@ -404,7 +410,7 @@
             </div>
 
             <!-- Physical UK Number Plate Component Replica -->
-            <div class="flex items-center justify-center py-2">
+            <div class="flex flex-col items-center justify-center py-2 gap-2">
               <div id="plate-badge" class="relative bg-plate-uk-yellow text-black px-6 py-2 rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.7)] select-none border-2 border-black/20">
                 <!-- Blue UK Identifier Ribbon -->
                 <div class="absolute left-0 top-0 bottom-0 w-6 bg-[#003399] rounded-l-md flex flex-col items-center justify-center">
@@ -415,6 +421,10 @@
                 <span id="plate-hero-text" class="pl-4 font-mono font-black text-2xl tracking-[4px] text-black">
                   WAITING...
                 </span>
+              </div>
+              <div id="inspector-crop-container" class="hidden flex items-center gap-2 bg-surface-container-lowest px-2 py-1 rounded border border-border-subtle">
+                <span class="text-[9px] font-mono text-on-surface-muted uppercase">Plate Crop:</span>
+                <img id="inspector-crop-img" src="" alt="Crop" class="h-6 rounded object-contain"/>
               </div>
             </div>
 
@@ -850,6 +860,19 @@
       document.getElementById('hud-timestamp').innerText = 'LIVE VIDEO PLAYBACK';
     }
 
+    let currentJobTracks = [];
+
+    function highlightActiveRow(targetFrame) {
+      if (targetFrame === undefined || targetFrame === null) return;
+      document.querySelectorAll('[id^="detection-row-"]').forEach(el => {
+        el.classList.remove('ring-1', 'ring-primary', 'bg-primary/20');
+      });
+      const row = document.getElementById(`detection-row-${targetFrame}`);
+      if (row) {
+        row.classList.add('ring-1', 'ring-primary', 'bg-primary/20');
+      }
+    }
+
     function handleVideoTimeUpdate(videoEl) {
       const t = videoEl.currentTime;
       const dur = videoEl.duration || 60;
@@ -858,36 +881,81 @@
       document.getElementById('hud-timestamp').innerText = `T: ${formatTimeSec(t)} / ${formatTimeSec(dur)} | FRAME #${frame}`;
       document.getElementById('inspector-frame-badge').innerText = `FRAME #${frame}`;
 
-      // Live match against database detections
-      if (allDetections && allDetections.length > 0) {
-        const match = allDetections.find(d => Math.abs((d.frame_number || 0) - frame) <= 15);
-        if (match) {
-          document.getElementById('plate-hero-text').innerText = match.plate_number;
-          document.getElementById('detail-vehicle-type').innerText = (match.vehicle_type || 'CAR').toUpperCase();
-          document.getElementById('detail-raw-text').innerText = match.raw_vlm_text || match.plate_number;
-          document.getElementById('detail-confidence').innerText = `${Math.round(match.confidence_score * 100)}%`;
-          currentSelectedCropUrl = match.plate_crop_path ? `/${match.plate_crop_path}` : null;
+      // 1. Check currentJobTracks if loaded from pipeline
+      let activeTarget = null;
+      if (currentJobTracks && currentJobTracks.length > 0) {
+        activeTarget = currentJobTracks.find(tr => frame >= (tr.start_frame - 3) && frame <= (tr.end_frame + 5));
+      }
 
-          const flagBox = document.getElementById('detail-flag-container');
-          const accentBar = document.getElementById('inspector-accent-bar');
-          const statusTitle = document.getElementById('inspector-status-title');
-          const plateBadge = document.getElementById('plate-badge');
-
-          if (match.is_watchlist_match) {
-            accentBar.className = 'absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-alert-crimson via-red-500 to-alert-crimson animate-pulse';
-            statusTitle.className = 'font-mono text-xs text-alert-crimson font-bold uppercase tracking-wider';
-            statusTitle.innerText = 'CRITICAL WATCHLIST HIT';
-            flagBox.classList.remove('hidden');
-            document.getElementById('detail-flag-reason').innerText = match.watchlist_reason || 'SECURITY HOTLIST MATCH';
-            plateBadge.classList.add('glow-crimson');
-          } else {
-            accentBar.className = 'absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-container to-primary';
-            statusTitle.className = 'font-mono text-xs text-primary font-bold uppercase tracking-wider';
-            statusTitle.innerText = 'VEHICLE INSPECTOR';
-            flagBox.classList.add('hidden');
-            plateBadge.classList.remove('glow-crimson');
+      // 2. Fallback to allDetections from database
+      if (!activeTarget && allDetections && allDetections.length > 0) {
+        const candidates = allDetections.filter(d => (d.frame_number || 0) > 0);
+        let minDiff = 999999;
+        let closest = null;
+        for (const d of candidates) {
+          const diff = Math.abs(d.frame_number - frame);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closest = d;
           }
         }
+        if (closest && minDiff <= 35) {
+          activeTarget = {
+            car_id: closest.car_id,
+            plate_number: closest.plate_number,
+            vehicle_type: closest.vehicle_type,
+            confidence: closest.confidence_score,
+            raw_text: closest.raw_vlm_text,
+            is_watchlist: closest.is_watchlist_match,
+            watchlist_reason: closest.watchlist_reason,
+            crop_path: closest.plate_crop_path,
+            frame_number: closest.frame_number
+          };
+        }
+      }
+
+      // 3. Update Vehicle Inspector HUD automatically without user interaction
+      if (activeTarget) {
+        document.getElementById('plate-hero-text').innerText = activeTarget.plate_number || 'UNKNOWN';
+        document.getElementById('detail-vehicle-type').innerText = (activeTarget.vehicle_type || 'CAR').toUpperCase() + (activeTarget.car_id ? ` #${activeTarget.car_id}` : '');
+        document.getElementById('detail-raw-text').innerText = activeTarget.raw_text || activeTarget.plate_number;
+        const confVal = activeTarget.confidence !== undefined ? Math.round(activeTarget.confidence * 100) : 100;
+        document.getElementById('detail-confidence').innerText = `${confVal}%`;
+        currentSelectedCropUrl = activeTarget.crop_path ? `/${activeTarget.crop_path}` : null;
+
+        // Show live plate crop thumbnail
+        const cropBox = document.getElementById('inspector-crop-container');
+        const cropImg = document.getElementById('inspector-crop-img');
+        if (cropBox && cropImg && currentSelectedCropUrl) {
+          cropImg.src = currentSelectedCropUrl;
+          cropBox.classList.remove('hidden');
+        }
+
+        const flagBox = document.getElementById('detail-flag-container');
+        const accentBar = document.getElementById('inspector-accent-bar');
+        const statusTitle = document.getElementById('inspector-status-title');
+        const statusSub = document.getElementById('inspector-status-sub');
+        const plateBadge = document.getElementById('plate-badge');
+
+        if (activeTarget.is_watchlist) {
+          accentBar.className = 'absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-alert-crimson via-red-500 to-alert-crimson animate-pulse';
+          statusTitle.className = 'font-mono text-xs text-alert-crimson font-bold uppercase tracking-wider';
+          statusTitle.innerText = 'CRITICAL WATCHLIST HIT';
+          statusSub.innerText = 'ACTIVE TRACK · ' + (activeTarget.watchlist_reason || 'HOTLIST MATCH');
+          flagBox.classList.remove('hidden');
+          document.getElementById('detail-flag-reason').innerText = activeTarget.watchlist_reason || 'SECURITY HOTLIST MATCH';
+          plateBadge.classList.add('glow-crimson');
+        } else {
+          accentBar.className = 'absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-container to-primary';
+          statusTitle.className = 'font-mono text-xs text-primary font-bold uppercase tracking-wider';
+          statusTitle.innerText = 'AUTO TRACKING MONITOR';
+          statusSub.innerText = 'LOCKED ON ACTIVE VEHICLE';
+          flagBox.classList.add('hidden');
+          plateBadge.classList.remove('glow-crimson');
+        }
+
+        // Auto highlight the row in the table
+        highlightActiveRow(activeTarget.frame_number || activeTarget.best_frame);
       }
     }
 
@@ -929,11 +997,14 @@
             clearInterval(interval);
             document.getElementById('pipeline-status').innerText = 'VIDEO COMPLETED';
             document.getElementById('progress-percent-label').innerText = '100% COMPLETE';
-            fetchDetections();
+            if (status.tracks) {
+              currentJobTracks = status.tracks;
+            }
+            await fetchDetections();
             fetchSystemStatus();
 
-            // Load and stream the video on HUD canvas
-            const target = status.annotated_video_url || status.video_url || '/videos/2103099-uhd_3840_2160_30fps.mp4';
+            // Load and stream the annotated processed video on HUD canvas
+            const target = status.annotated_video_url || status.video_url || '/videos/annotated_sample.mp4';
             loadVideoToHUD(target, fileName || 'Processed Video');
           } else if (status.status === 'failed') {
             clearInterval(interval);
@@ -977,11 +1048,15 @@
         const badgeColor = isMatch ? 'bg-alert-crimson text-white' : 'bg-plate-uk-yellow text-black';
         const tagText = isMatch ? 'HOTLIST HIT' : 'VERIFIED';
         const tagColor = isMatch ? 'bg-alert-crimson/20 text-alert-crimson border border-alert-crimson/30' : 'bg-surface-container-high text-tertiary';
+        const displayTime = item.video_timestamp && item.video_timestamp !== 'IMG' ? item.video_timestamp : (item.frame_number > 0 ? formatTimeSec(item.frame_number / 30) : 'IMG');
 
         return `
-          <div onclick="selectRowInspection('${item.plate_number}', '${item.vehicle_type}', ${item.confidence_score}, ${isMatch}, '${item.watchlist_reason || ''}', '${item.plate_crop_path || ''}', ${item.frame_number || 0})" class="p-2.5 ${rowBg} transition-colors cursor-pointer flex items-center justify-between gap-2" title="Click to inspect & seek video to frame #${item.frame_number}">
+          <div id="detection-row-${item.frame_number}" onclick="selectRowInspection('${item.plate_number}', '${item.vehicle_type}', ${item.confidence_score}, ${isMatch}, '${item.watchlist_reason || ''}', '${item.plate_crop_path || ''}', ${item.frame_number || 0})" class="p-2.5 ${rowBg} transition-colors cursor-pointer flex items-center justify-between gap-2 border-b border-border-subtle/30" title="Click to inspect & seek video to frame #${item.frame_number}">
             <div class="flex items-center gap-2">
-              <span class="text-[10px] text-on-surface-muted">${item.detected_at.substring(11, 19) || '12:00:00'}</span>
+              <span class="font-mono text-[10px] text-primary bg-primary/10 border border-primary/20 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold whitespace-nowrap" title="Video Timeline Position (MM:SS)">
+                <span class="material-symbols-outlined text-[11px]">schedule</span>
+                ${displayTime}
+              </span>
               <div class="${badgeColor} px-1.5 py-0.5 rounded font-black text-[11px] tracking-wider shadow-sm">
                 ${item.plate_number}
               </div>
@@ -1006,6 +1081,18 @@
       document.getElementById('detail-latency').innerText = `12.2 ms`;
       currentSelectedCropUrl = cropPath ? `/${cropPath}` : null;
 
+      // Update crop preview
+      const cropBox = document.getElementById('inspector-crop-container');
+      const cropImg = document.getElementById('inspector-crop-img');
+      if (cropBox && cropImg) {
+        if (currentSelectedCropUrl) {
+          cropImg.src = currentSelectedCropUrl;
+          cropBox.classList.remove('hidden');
+        } else {
+          cropBox.classList.add('hidden');
+        }
+      }
+
       const flagBox = document.getElementById('detail-flag-container');
       const accentBar = document.getElementById('inspector-accent-bar');
       const statusTitle = document.getElementById('inspector-status-title');
@@ -1026,8 +1113,8 @@
       } else {
         accentBar.className = 'absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-container to-primary';
         statusTitle.className = 'font-mono text-xs text-primary font-bold uppercase tracking-wider';
-        statusTitle.innerText = 'VEHICLE INSPECTOR';
-        statusSub.innerText = 'STANDARD AUTHORIZED READ';
+        statusTitle.innerText = 'AUTO TRACKING MONITOR';
+        statusSub.innerText = 'INSPECTION LOCKED';
         flagBox.classList.add('hidden');
         dispatchBtn.className = 'flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-mono text-xs font-bold transition-all shadow-md';
         document.getElementById('btn-dispatch-text').innerText = 'Log Verified Read';
@@ -1036,9 +1123,9 @@
 
       // If video player is active or can be loaded, seek to frame!
       const videoEl = document.getElementById('hud-display-video');
-      if (frameNumber !== undefined && frameNumber !== null) {
+      if (frameNumber !== undefined && frameNumber !== null && frameNumber > 0) {
         if (videoEl.classList.contains('hidden') || !videoEl.src) {
-          loadVideoToHUD('/videos/2103099-uhd_3840_2160_30fps.mp4', '2103099-uhd_3840_2160_30fps.mp4');
+          loadVideoToHUD('/videos/annotated_sample.mp4', 'Sample Annotated Video');
         }
         videoEl.currentTime = frameNumber / 30.0;
         videoEl.play().catch(e => {});
