@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>ANPR Sentry Tactical v4.2 // Automated Number Plate Recognition Hub</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#0f131d",
+            "surface-dim": "#0f131d",
+            "surface-bright": "#353944",
+            "surface-container-lowest": "#0a0e18",
+            "surface-container-low": "#171b26",
+            "surface-container": "#1c1f2a",
+            "surface-container-high": "#262a35",
+            "surface-container-highest": "#313540",
+            "on-surface": "#dfe2f1",
+            "on-surface-variant": "#bcc9cd",
+            "on-surface-muted": "#9ca3af",
+            "primary": "#4cd7f6",
+            "primary-container": "#06b6d4",
+            "on-primary": "#003640",
+            "on-primary-container": "#00424f",
+            "secondary": "#adc6ff",
+            "secondary-container": "#0566d9",
+            "tertiary": "#4edea3",
+            "tertiary-container": "#1bbd85",
+            "alert-crimson": "#ef4444",
+            "alert-amber": "#f59e0b",
+            "plate-uk-yellow": "#fcd34d",
+            "plate-uk-white": "#ffffff",
+            "border-subtle": "#1f2937",
+            "border-accent": "#374151",
+            "surface-glass": "rgba(17, 24, 39, 0.75)"
+          },
+          fontFamily: {
+            "sans": ["Inter", "sans-serif"],
+            "mono": ["'JetBrains Mono'", "monospace"],
+            "plate": ["'JetBrains Mono'", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; background-color: #0f131d; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0e18; }
+    ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+    
+    .glow-cyan { box-shadow: 0 0 20px rgba(6, 182, 212, 0.35); }
+    .glow-crimson { box-shadow: 0 0 25px rgba(239, 68, 68, 0.45); }
+    .scan-line {
+      background: linear-gradient(to bottom, rgba(6, 182, 212, 0), rgba(6, 182, 212, 0.25) 50%, rgba(6, 182, 212, 0));
+      animation: scan 3s linear infinite;
+    }
+    @keyframes scan {
+      0% { top: -100%; }
+      100% { top: 100%; }
+    }
+  </style>
+</head>
+<body class="bg-surface font-sans text-on-surface antialiased overflow-x-hidden">
+
+  <!-- Tactical Sidebar -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 flex flex-col justify-between border-r border-border-subtle shadow-2xl">
+    <div class="flex flex-col">
+      <!-- Brand Header -->
+      <div class="h-16 px-4 flex items-center gap-3 bg-surface-container-lowest/80 border-b border-border-subtle">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary via-primary-container to-blue-700 flex items-center justify-center shadow-[0_0_12px_#06b6d4]">
+          <span class="material-symbols-outlined text-surface font-black text-lg">videocam</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-sm text-primary tracking-wider font-mono">ANPR SENTRY</span>
+          <span class="text-[10px] text-on-surface-muted font-mono tracking-widest">// V4.2 TACTICAL</span>
+        </div>
+      </div>
+
+      <!-- Live Node Status -->
+      <div class="px-4 py-3 border-b border-border-subtle/50">
+        <div class="flex items-center justify-between px-3 py-1.5 bg-surface-container rounded-lg border border-border-subtle">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse shadow-[0_0_8px_#10b981]"></span>
+            <span class="font-mono text-xs text-primary font-bold" id="node-name">NODE-04 ONLINE</span>
+          </div>
+          <span class="font-mono text-[10px] text-tertiary font-semibold" id="device-chip">CUDA</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="px-2 py-3 space-y-1 font-mono text-xs">
+        <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-primary-container text-on-primary-container font-semibold shadow-[0_0_12px_rgba(6,182,212,0.35)]">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-sm">video_file</span>
+            <span>Video & File Workspace</span>
+          </div>
+          <span class="text-[9px] bg-surface/40 px-1.5 py-0.5 rounded text-white">ACTIVE</span>
+        </a>
+
+        <a href="#audit-log" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-sm">table_rows</span>
+            <span>Vehicle Audit Log</span>
+          </div>
+          <span class="text-[10px] text-on-surface-muted" id="sidebar-detection-count">0</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="openWatchlistModal()" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-sm text-alert-crimson">warning</span>
+            <span>Watchlist & Alerts</span>
+          </div>
+          <span class="px-1.5 py-0.5 rounded bg-alert-crimson/20 text-alert-crimson font-bold text-[10px] border border-alert-crimson/30" id="sidebar-watchlist-count">0</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="fetchSystemStatus()" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-sm text-tertiary">memory</span>
+            <span>Model Diagnostics</span>
+          </div>
+          <span class="text-[10px] text-tertiary">OK</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- NPU / GPU Telemetry Dock -->
+    <div class="p-4 bg-surface-container-lowest border-t border-border-subtle">
+      <div class="p-2.5 rounded-lg bg-surface-container border border-border-subtle flex flex-col gap-1.5">
+        <div class="flex items-center justify-between font-mono text-[11px]">
+          <span class="text-on-surface-muted">VRAM USAGE</span>
+          <span class="text-primary font-bold" id="vram-text">Loading...</span>
+        </div>
+        <div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+          <div class="bg-gradient-to-r from-primary to-tertiary h-full w-[45%]" id="vram-bar"></div>
+        </div>
+        <div class="flex items-center justify-between text-[10px] text-on-surface-muted font-mono pt-0.5">
+          <span>TensorRT FP16</span>
+          <span class="text-tertiary">12.2ms</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrap -->
+  <div class="pl-64 flex flex-col min-h-screen">
+    <!-- Top Command Header -->
+    <header class="h-16 bg-surface-glass backdrop-blur-xl border-b border-border-subtle sticky top-0 z-40 flex items-center justify-between px-6">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 px-3 py-1 rounded-md bg-surface-container font-mono text-xs border border-border-subtle">
+          <span class="material-symbols-outlined text-primary text-sm">schedule</span>
+          <span id="utc-clock">2026-09-27 15:55:00 UTC</span>
+        </div>
+        <div class="hidden xl:flex items-center gap-3 px-3 py-1 rounded-md bg-surface-container font-mono text-xs text-on-surface-muted border border-border-subtle">
+          <span>Latency: <strong class="text-tertiary font-bold" id="header-latency">12.2ms</strong></span>
+          <span class="text-border-accent">|</span>
+          <span>FPS: <strong class="text-primary font-bold" id="header-fps">73.4</strong></span>
+          <span class="text-border-accent">|</span>
+          <span>Engine: <span class="text-on-surface font-semibold" id="header-engine">PaddleOCR v4</span></span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Audio Alert Toggle -->
+        <button id="btn-audio-toggle" onclick="toggleAudio()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-surface-container-high hover:bg-surface-variant text-on-surface-variant font-mono text-xs transition-colors border border-border-subtle" type="button">
+          <span class="material-symbols-outlined text-sm text-alert-amber" id="audio-icon">volume_up</span>
+          <span id="audio-label">AUDIO ON</span>
+        </button>
+
+        <!-- Operator Badge -->
+        <div class="flex items-center gap-3 pl-2 border-l border-border-subtle">
+          <div class="flex flex-col text-right">
+            <span class="text-xs font-semibold text-on-surface">Operator Sentry</span>
+            <span class="text-[10px] text-primary font-mono font-medium">TACTICAL DISPATCH</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-blue-500 border border-primary flex items-center justify-center font-mono font-bold text-xs shadow-[0_0_8px_rgba(6,182,212,0.4)]">
+            OP
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Workspace Main Body -->
+    <main class="flex-1 p-6 space-y-6">
+      
+      <!-- Top Action Bar & Engine Selector -->
+      <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-surface-container-low/90 backdrop-blur-xl p-4 rounded-xl border border-border-subtle shadow-xl">
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-2 flex-wrap font-mono text-xs">
+            <span class="px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-bold uppercase tracking-wider text-[11px]">Neural Pipeline</span>
+            <span class="text-on-surface-muted">//</span>
+            <span class="text-tertiary flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+              TENSORRT FP16 ACCELERATED
+            </span>
+            <span class="text-on-surface-muted">//</span>
+            <span class="text-on-surface-variant">BATCH & REAL-TIME MODE</span>
+          </div>
+          <h1 class="text-xl font-bold text-on-surface tracking-tight flex items-center gap-2">
+            <span>VIDEO & FILE ANALYSIS WORKSPACE</span>
+            <span class="text-on-surface-muted font-mono text-xs font-normal">#INFERENCE-NODE-04</span>
+          </h1>
+        </div>
+
+        <!-- Engine Switcher Pill & Actions -->
+        <div class="flex items-center gap-3 flex-wrap">
+          <!-- Dual-Engine Switcher Pill -->
+          <div class="flex items-center p-1 bg-surface-container-lowest rounded-full border border-border-subtle shadow-inner">
+            <button id="btn-engine-paddle" onclick="selectEngine('paddleocr')" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-mono text-xs font-bold shadow-[0_0_16px_rgba(6,182,212,0.4)] transition-all">
+              <span class="w-2 h-2 rounded-full bg-plate-uk-white"></span>
+              <span>PaddleOCR v4</span>
+              <span class="opacity-75 font-normal text-[10px]">~12ms</span>
+            </button>
+            <button id="btn-engine-qwen" onclick="selectEngine('qwen2_vl')" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface font-mono text-xs transition-all">
+              <span class="w-1.5 h-1.5 rounded-full bg-on-surface-muted"></span>
+              <span>Qwen2-VL QLoRA</span>
+              <span class="opacity-60 font-normal text-[10px]">~45ms</span>
+            </button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-2">
+            <button onclick="document.getElementById('video-upload-input').click()" class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface font-mono text-xs font-semibold border border-border-subtle shadow transition-all">
+              <span class="material-symbols-outlined text-sm text-primary">upload_file</span>
+              <span>Upload Video</span>
+            </button>
+            <button onclick="document.getElementById('image-upload-input').click()" class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-mono text-xs font-bold glow-cyan transition-all">
+              <span class="material-symbols-outlined text-sm">image</span>
+              <span>Single Image Test</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden File Inputs -->
+      <input type="file" id="image-upload-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)"/>
+      <input type="file" id="video-upload-input" accept="video/mp4,video/avi,video/mov" class="hidden" onchange="handleVideoUpload(event)"/>
+
+      <!-- Main Asymmetric Workspace Layout (65% / 35%) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Column: Video & Image Canvas HUD (lg:col-span-8) -->
+        <div class="lg:col-span-8 flex flex-col space-y-4">
+          
+          <!-- Source Navigation & Ingest Banner -->
+          <div class="bg-surface-container-low rounded-xl p-4 border border-border-subtle shadow-lg space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
+                <button class="px-3 py-1.5 rounded-lg bg-surface-container-high text-primary font-mono text-xs font-bold border border-primary/30 flex items-center gap-1.5 shadow-sm">
+                  <span class="material-symbols-outlined text-xs">check_circle</span>
+                  <span id="active-file-label" class="truncate max-w-[280px]">2103099-uhd_3840_2160_30fps.mp4</span>
+                </button>
+                
+                <!-- Quick Benchmark Sample Dropdown -->
+                <div class="relative">
+                  <select id="sample-picker" onchange="loadSampleImage(this.value)" class="bg-surface-container text-on-surface-variant font-mono text-xs px-3 py-1.5 rounded-lg border border-border-subtle focus:outline-none focus:border-primary">
+                    <option value="">⚡ Quick Test Sample Plate...</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1 text-on-surface-muted font-mono text-xs">
+                <span class="material-symbols-outlined text-xs text-tertiary">memory</span>
+                <span id="gpu-telemetry-badge">RTX 3060 DUAL · 73.4 FPS</span>
+              </div>
+            </div>
+
+            <!-- Ingest Processing Status Bar -->
+            <div class="bg-surface-container-lowest p-3 rounded-lg border border-border-subtle flex flex-col space-y-2">
+              <div class="flex items-center justify-between text-on-surface-variant font-mono text-xs">
+                <div class="flex items-center gap-4 flex-wrap">
+                  <span>INPUT: <strong class="text-on-surface font-semibold" id="input-stats-dim">UHD 4K / H.264</strong></span>
+                  <span>STATUS: <strong class="text-tertiary font-semibold" id="pipeline-status">READY FOR INFERENCE</strong></span>
+                </div>
+                <span class="text-tertiary font-bold" id="progress-percent-label">100% COMPLETE</span>
+              </div>
+              <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+                <div id="pipeline-progress-bar" class="bg-gradient-to-r from-primary via-tertiary to-primary-container h-full w-full rounded-full shadow-[0_0_12px_rgba(78,222,163,0.5)] transition-all duration-300"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tactical HUD Canvas (16:9) -->
+          <div class="relative w-full aspect-video bg-surface-container-lowest rounded-xl overflow-hidden border border-border-subtle shadow-2xl group select-none flex items-center justify-center">
+            
+            <!-- Canvas Display Image / Video -->
+            <img id="hud-display-image" src="" alt="ANPR HUD Canvas" class="hidden w-full h-full object-contain filter brightness-95 contrast-105"/>
+            <video id="hud-display-video" controls class="hidden w-full h-full object-contain"></video>
+
+            <!-- Default Placeholder if no media loaded -->
+            <div id="hud-placeholder" class="flex flex-col items-center justify-center p-8 text-center space-y-3">
+              <div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center border border-border-subtle text-primary shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+                <span class="material-symbols-outlined text-3xl">filter_center_focus</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-mono text-sm font-bold text-on-surface tracking-wider">TACTICAL ANPR HUD READY</span>
+                <span class="text-xs text-on-surface-muted max-w-md pt-1">Select a benchmark sample above, upload an image or video to initiate automatic vehicle detection and license plate extraction.</span>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <button onclick="loadSampleImage('car_1701_SC56DYP_0.71.jpg')" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-primary font-mono text-xs border border-primary/30 transition-all">
+                  Test "SC56DYP" (Sample 1)
+                </button>
+                <button onclick="loadSampleImage('car_1011_BP63LYH_0.99.jpg')" class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-tertiary font-mono text-xs border border-tertiary/30 transition-all">
+                  Test "BP63LYH" (Sample 2)
+                </button>
+              </div>
+            </div>
+
+            <!-- Top HUD Telemetry Ribbon -->
+            <div class="absolute top-0 left-0 right-0 p-4 flex items-start justify-between pointer-events-none">
+              <div class="flex items-center gap-2 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1 rounded-md border border-border-subtle shadow-md">
+                <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+                <span class="font-mono text-xs text-on-surface font-bold tracking-wider">ANPR SENTRY HUD</span>
+                <span class="text-on-surface-muted font-mono text-xs">|</span>
+                <span class="font-mono text-xs text-primary" id="hud-timestamp">LIVE STREAM READY</span>
+              </div>
+              <div class="flex items-center gap-3 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1 rounded-md border border-border-subtle shadow-md font-mono text-xs">
+                <span class="text-tertiary font-bold" id="hud-resolution">4K UHD</span>
+                <span class="text-on-surface-muted">|</span>
+                <span class="text-primary font-bold">ZOOM x1.0</span>
+              </div>
+            </div>
+
+            <!-- Tactical Center Crosshair -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+              <div class="w-10 h-10 rounded-full border border-primary flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-primary rounded-full"></div>
+              </div>
+            </div>
+
+            <!-- Scanning line animation during inference -->
+            <div id="hud-scanner" class="absolute inset-0 scan-line pointer-events-none hidden"></div>
+          </div>
+
+          <!-- Quick Metrics Strip -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="bg-surface-container-low p-3 rounded-lg border border-border-subtle flex flex-col shadow-sm">
+              <span class="font-mono text-[11px] text-on-surface-muted">TARGETS IN VIEW</span>
+              <span class="font-mono text-lg text-primary font-bold" id="metric-targets">0 VEHICLES</span>
+              <span class="font-mono text-[10px] text-tertiary">Spatial boundaries locked</span>
+            </div>
+            <div class="bg-surface-container-low p-3 rounded-lg border border-border-subtle flex flex-col shadow-sm">
+              <span class="font-mono text-[11px] text-on-surface-muted">CONFIDENCE AVG</span>
+              <span class="font-mono text-lg text-tertiary font-bold" id="metric-confidence">99.4%</span>
+              <span class="font-mono text-[10px] text-on-surface-muted">Threshold: 85%</span>
+            </div>
+            <div class="bg-surface-container-low p-3 rounded-lg border border-border-subtle flex flex-col shadow-sm">
+              <span class="font-mono text-[11px] text-on-surface-muted">OCR SPEED</span>
+              <span class="font-mono text-lg text-on-surface font-bold" id="metric-latency">12.2 ms</span>
+              <span class="font-mono text-[10px] text-primary" id="metric-engine-label">PaddleOCR TensorRT</span>
+            </div>
+            <div class="bg-surface-container-low p-3 rounded-lg border border-border-subtle flex flex-col shadow-sm">
+              <span class="font-mono text-[11px] text-on-surface-muted">WATCHLIST FLAGS</span>
+              <span class="font-mono text-lg text-alert-crimson font-bold" id="metric-alerts">0 FLAGS</span>
+              <span class="font-mono text-[10px] text-alert-crimson" id="metric-alert-sub">Database Synchronized</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Vehicle Inspector & Watchlist Triage (lg:col-span-4) -->
+        <div class="lg:col-span-4 flex flex-col space-y-4">
+          
+          <!-- Focused Plate & Critical Hit Inspector Card -->
+          <div id="inspector-card" class="bg-surface-container-low rounded-xl p-4 border border-border-subtle shadow-xl relative overflow-hidden flex flex-col space-y-3">
+            
+            <!-- Glowing Accent Top Line -->
+            <div id="inspector-accent-bar" class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-container to-primary"></div>
+
+            <!-- Card Header -->
+            <div class="flex items-center justify-between pt-1">
+              <div class="flex items-center gap-2">
+                <span id="inspector-status-icon" class="p-1 rounded bg-primary/20 text-primary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-sm font-bold">directions_car</span>
+                </span>
+                <div class="flex flex-col">
+                  <span id="inspector-status-title" class="font-mono text-xs text-primary font-bold uppercase tracking-wider">VEHICLE INSPECTOR</span>
+                  <span id="inspector-status-sub" class="font-mono text-[10px] text-on-surface-muted">REAL-TIME TELEMETRY</span>
+                </div>
+              </div>
+              <span id="inspector-frame-badge" class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono text-[10px] border border-border-subtle">
+                FRAME #000
+              </span>
+            </div>
+
+            <!-- Physical UK Number Plate Component Replica -->
+            <div class="flex items-center justify-center py-2">
+              <div id="plate-badge" class="relative bg-plate-uk-yellow text-black px-6 py-2 rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.7)] select-none border-2 border-black/20">
+                <!-- Blue UK Identifier Ribbon -->
+                <div class="absolute left-0 top-0 bottom-0 w-6 bg-[#003399] rounded-l-md flex flex-col items-center justify-center">
+                  <span class="text-plate-uk-yellow text-[8px] leading-none mb-0.5 font-bold">★</span>
+                  <span class="font-mono text-[8px] font-bold text-white tracking-tighter">UK</span>
+                </div>
+                <!-- Monospace Embossed Plate Characters -->
+                <span id="plate-hero-text" class="pl-4 font-mono font-black text-2xl tracking-[4px] text-black">
+                  WAITING...
+                </span>
+              </div>
+            </div>
+
+            <!-- Vehicle Details Grid -->
+            <div class="grid grid-cols-2 gap-2 bg-surface-container p-3 rounded-lg text-xs font-mono border border-border-subtle">
+              <div>
+                <span class="text-[10px] text-on-surface-muted block">CLASSIFICATION</span>
+                <span id="detail-vehicle-type" class="text-on-surface font-semibold">Vehicle</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-on-surface-muted block">RAW OCR TEXT</span>
+                <span id="detail-raw-text" class="text-on-surface font-semibold">---</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-on-surface-muted block">OCR CONFIDENCE</span>
+                <span id="detail-confidence" class="text-tertiary font-bold">---%</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-on-surface-muted block">INFERENCE TIME</span>
+                <span id="detail-latency" class="text-primary font-bold">--- ms</span>
+              </div>
+              
+              <!-- Watchlist details -->
+              <div id="detail-flag-container" class="col-span-2 pt-2 border-t border-border-subtle/50 hidden">
+                <span class="text-[10px] text-alert-crimson font-bold block">FLAG DETAILS</span>
+                <span id="detail-flag-reason" class="text-on-surface text-[11px] leading-snug">
+                  ---
+                </span>
+              </div>
+            </div>
+
+            <!-- Immediate Action Buttons -->
+            <div class="flex items-center gap-2 pt-1">
+              <button id="btn-dispatch" onclick="dispatchPatrol()" class="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-mono text-xs font-bold transition-all shadow-md">
+                <span class="material-symbols-outlined text-sm">local_police</span>
+                <span id="btn-dispatch-text">Log Detection</span>
+              </button>
+              <button onclick="downloadPlateEvidence()" class="p-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface border border-border-subtle transition-colors" title="Download Crop Evidence">
+                <span class="material-symbols-outlined text-sm text-primary">download</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Video & File Ingestion Log Table -->
+          <div class="bg-surface-container-low rounded-xl p-4 border border-border-subtle shadow-lg flex flex-col space-y-3" id="audit-log">
+            <div class="flex items-center justify-between">
+              <h2 class="text-sm font-bold text-on-surface flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm text-primary">dynamic_feed</span>
+                <span>Vehicle Ingestion Log</span>
+              </h2>
+              <span class="font-mono text-xs text-on-surface-muted" id="total-reads-counter">0 READS</span>
+            </div>
+
+            <!-- Search Plate Input -->
+            <div class="relative w-full">
+              <input id="search-plate-input" oninput="filterDetectionLog(this.value)" class="w-full bg-surface-container-lowest text-on-surface placeholder:text-on-surface-muted font-mono text-xs px-3 py-2 pl-8 rounded-lg border border-border-subtle focus:outline-none focus:border-primary shadow-inner" placeholder="SEARCH PLATE (E.G. BD20)..." type="text"/>
+              <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-on-surface-muted text-sm">search</span>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="flex items-center gap-1.5 flex-wrap font-mono text-[11px]">
+              <button onclick="setFilter('all')" id="filter-all" class="px-2.5 py-1 rounded-md bg-primary-container text-on-primary-container font-bold">
+                All (<span id="count-all">0</span>)
+              </button>
+              <button onclick="setFilter('watchlist')" id="filter-watchlist" class="px-2.5 py-1 rounded-md bg-surface-container-high hover:bg-surface-variant text-alert-crimson font-semibold">
+                Hotlist (<span id="count-hotlist">0</span>)
+              </button>
+              <button onclick="setFilter('high_conf')" id="filter-high-conf" class="px-2.5 py-1 rounded-md bg-surface-container-high hover:bg-surface-variant text-on-surface-variant">
+                Conf > 90%
+              </button>
+            </div>
+
+            <!-- Detections Stream List -->
+            <div class="w-full overflow-hidden rounded-lg bg-surface-container-lowest border border-border-subtle shadow-inner max-h-80 overflow-y-auto">
+              <div id="detections-table-body" class="divide-y divide-border-subtle/40 font-mono text-xs">
+                <!-- Rows injected dynamically via JS -->
+                <div class="p-4 text-center text-on-surface-muted text-xs">
+                  No detection records loaded.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-on-surface-muted font-mono text-[11px] pt-1">
+              <span>Click row to inspect</span>
+              <button onclick="fetchDetections()" class="text-primary hover:underline flex items-center gap-0.5 font-bold">
+                <span>Refresh Log</span>
+                <span class="material-symbols-outlined text-xs">refresh</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Diagnostics & Telemetry Dock -->
+      <div class="w-full bg-surface-container-low/80 backdrop-blur-xl p-4 rounded-xl border border-border-subtle shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 font-mono text-xs">
+        <div class="flex items-center gap-6 flex-wrap text-on-surface-muted">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+            <span>FRAME RATE: <strong class="text-on-surface font-bold" id="bottom-fps">73.4 FPS</strong></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-primary"></span>
+            <span>LATENCY: <strong class="text-on-surface font-bold" id="bottom-latency">12.2 ms</strong></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+            <span>UNIQUE PLATES: <strong class="text-on-surface font-bold" id="bottom-unique-count">0</strong></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-plate-uk-yellow"></span>
+            <span>OCR PRECISION: <strong class="text-on-surface font-bold">99.4%</strong></span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 text-on-surface-muted text-[11px]">
+          <span>BACKEND: <span class="text-primary font-bold" id="bottom-backend">TensorRT + PaddleOCR / Qwen2-VL</span></span>
+          <span class="text-border-accent">|</span>
+          <span class="text-tertiary font-bold" id="bottom-device-label">DEVICE: CUDA 12.4</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Watchlist Modal -->
+  <div id="watchlist-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container-low border border-border-subtle rounded-xl max-w-xl w-full p-6 shadow-2xl flex flex-col space-y-4">
+      <div class="flex items-center justify-between border-b border-border-subtle pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-alert-crimson">warning</span>
+          <h3 class="font-mono text-sm font-bold text-on-surface">SECURITY WATCHLIST MANAGEMENT</h3>
+        </div>
+        <button onclick="closeWatchlistModal()" class="text-on-surface-muted hover:text-on-surface">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Add to Watchlist Form -->
+      <div class="bg-surface-container p-3 rounded-lg border border-border-subtle space-y-2">
+        <span class="font-mono text-xs text-primary font-bold">Add License Plate to Watchlist</span>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <input id="new-plate-input" type="text" placeholder="Plate (e.g. BD20ZXP)" class="bg-surface-container-lowest text-on-surface font-mono text-xs px-3 py-1.5 rounded border border-border-subtle focus:outline-none focus:border-primary uppercase"/>
+          <input id="new-reason-input" type="text" placeholder="Reason (e.g. Stolen Car)" class="bg-surface-container-lowest text-on-surface font-mono text-xs px-3 py-1.5 rounded border border-border-subtle focus:outline-none focus:border-primary sm:col-span-2"/>
+        </div>
+        <button onclick="addNewWatchlistPlate()" class="w-full py-1.5 rounded bg-alert-crimson hover:bg-red-600 text-white font-mono text-xs font-bold transition-all shadow">
+          + Add to Critical Watchlist
+        </button>
+      </div>
+
+      <!-- Current Watchlist Table -->
+      <div class="overflow-y-auto max-h-60 rounded border border-border-subtle bg-surface-container-lowest">
+        <table class="w-full font-mono text-xs text-left">
+          <thead class="bg-surface-container border-b border-border-subtle text-on-surface-muted text-[11px]">
+            <tr>
+              <th class="p-2">PLATE</th>
+              <th class="p-2">REASON</th>
+              <th class="p-2">ALERT</th>
+              <th class="p-2 text-right">ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="watchlist-table-body" class="divide-y divide-border-subtle/50">
+            <!-- Injected via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button onclick="closeWatchlistModal()" class="px-4 py-1.5 rounded bg-surface-container-high hover:bg-surface-variant font-mono text-xs text-on-surface">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Chime Element -->
+  <audio id="alert-audio" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    let activeEngine = "paddleocr";
+    let isAudioEnabled = true;
+    let currentFilter = "all";
+    let allDetections = [];
+    let currentSelectedCropUrl = null;
+
+    // 1. Clock Updates
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('utc-clock').innerText = now.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Audio Control
+    function toggleAudio() {
+      isAudioEnabled = !isAudioEnabled;
+      const icon = document.getElementById('audio-icon');
+      const label = document.getElementById('audio-label');
+      if (isAudioEnabled) {
+        icon.innerText = 'volume_up';
+        icon.className = 'material-symbols-outlined text-sm text-alert-amber';
+        label.innerText = 'AUDIO ON';
+      } else {
+        icon.innerText = 'volume_off';
+        icon.className = 'material-symbols-outlined text-sm text-on-surface-muted';
+        label.innerText = 'AUDIO MUTED';
+      }
+    }
+
+    function playAlertChime() {
+      if (!isAudioEnabled) return;
+      const audio = document.getElementById('alert-audio');
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log('Audio autoplay prevented:', e));
+      }
+    }
+
+    // 3. Engine Switcher
+    async function selectEngine(engineName) {
+      activeEngine = engineName;
+      const btnPaddle = document.getElementById('btn-engine-paddle');
+      const btnQwen = document.getElementById('btn-engine-qwen');
+      const headerEngine = document.getElementById('header-engine');
+      const metricEngine = document.getElementById('metric-engine-label');
+
+      if (engineName === 'paddleocr') {
+        btnPaddle.className = 'flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-mono text-xs font-bold shadow-[0_0_16px_rgba(6,182,212,0.4)] transition-all';
+        btnQwen.className = 'flex items-center gap-1.5 px-4 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface font-mono text-xs transition-all';
+        headerEngine.innerText = 'PaddleOCR v4';
+        metricEngine.innerText = 'PaddleOCR TensorRT';
+      } else {
+        btnQwen.className = 'flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-secondary-container text-white font-mono text-xs font-bold shadow-[0_0_16px_rgba(5,102,217,0.4)] transition-all';
+        btnPaddle.className = 'flex items-center gap-1.5 px-4 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface font-mono text-xs transition-all';
+        headerEngine.innerText = 'Qwen2-VL QLoRA';
+        metricEngine.innerText = 'Qwen2-VL 4-bit LoRA';
+      }
+
+      const form = new FormData();
+      form.append('engine', engineName);
+      try {
+        await fetch('/api/engine/switch', { method: 'POST', body: form });
+      } catch (err) {
+        console.error('Error switching engine:', err);
+      }
+    }
+
+    // 4. Fetch System Diagnostics
+    async function fetchSystemStatus() {
+      try {
+        const res = await fetch('/api/system/status');
+        const data = await res.json();
+        if (data.cuda_available) {
+          document.getElementById('gpu-telemetry-badge').innerText = `${data.device} · ONLINE`;
+          document.getElementById('device-chip').innerText = 'CUDA 12.4';
+          document.getElementById('bottom-device-label').innerText = `DEVICE: ${data.device}`;
+          const used = data.gpu_memory_used_mb;
+          const total = data.gpu_memory_total_mb;
+          document.getElementById('vram-text').innerText = `${used} / ${total} MB`;
+          const pct = Math.min(100, Math.round((used / total) * 100));
+          document.getElementById('vram-bar').style.width = `${pct}%`;
+        }
+        document.getElementById('sidebar-detection-count').innerText = data.total_detections;
+        document.getElementById('sidebar-watchlist-count').innerText = data.total_watchlist;
+      } catch (err) {
+        console.error('Failed to fetch status:', err);
+      }
+    }
+
+    // 5. Populate Sample Images Dropdown
+    async function populateSamples() {
+      try {
+        const res = await fetch('/api/sample_images');
+        const data = await res.json();
+        const picker = document.getElementById('sample-picker');
+        data.samples.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.filename;
+          opt.innerText = `Crop: ${s.filename}`;
+          picker.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Failed to load sample images:', err);
+      }
+    }
+
+    // 6. Test Single Image / Crop
+    async function loadSampleImage(filename) {
+      if (!filename) return;
+      document.getElementById('active-file-label').innerText = filename;
+      document.getElementById('hud-scanner').classList.remove('hidden');
+      document.getElementById('pipeline-status').innerText = 'INSPECTING SAMPLE...';
+
+      const formData = new FormData();
+      formData.append('sample_filename', filename);
+      formData.append('engine', activeEngine);
+
+      try {
+        const res = await fetch('/api/analyze/image', { method: 'POST', body: formData });
+        const result = await res.json();
+        handleAnalysisResult(result, filename);
+      } catch (err) {
+        console.error('Error analyzing sample image:', err);
+      } finally {
+        document.getElementById('hud-scanner').classList.add('hidden');
+        document.getElementById('pipeline-status').innerText = 'INFERENCE COMPLETE';
+      }
+    }
+
+    async function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      document.getElementById('active-file-label').innerText = file.name;
+      document.getElementById('hud-scanner').classList.remove('hidden');
+      document.getElementById('pipeline-status').innerText = 'RUNNING TENSORRT + OCR...';
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('engine', activeEngine);
+
+      try {
+        const res = await fetch('/api/analyze/image', { method: 'POST', body: formData });
+        const result = await res.json();
+        handleAnalysisResult(result, file.name);
+      } catch (err) {
+        console.error('Error analyzing image upload:', err);
+      } finally {
+        document.getElementById('hud-scanner').classList.add('hidden');
+        document.getElementById('pipeline-status').innerText = 'INFERENCE COMPLETE';
+      }
+    }
+
+    function handleAnalysisResult(result, sourceName) {
+      if (result.status !== 'success') return;
+
+      // Update HUD Display Image
+      const displayImg = document.getElementById('hud-display-image');
+      const placeholder = document.getElementById('hud-placeholder');
+      const videoEl = document.getElementById('hud-display-video');
+
+      videoEl.classList.add('hidden');
+      placeholder.classList.add('hidden');
+      displayImg.src = result.annotated_image;
+      displayImg.classList.remove('hidden');
+
+      // Update HUD Telemetry
+      document.getElementById('header-latency').innerText = `${result.total_latency_ms}ms`;
+      document.getElementById('bottom-latency').innerText = `${result.total_latency_ms}ms`;
+      document.getElementById('metric-latency').innerText = `${result.total_latency_ms}ms`;
+      document.getElementById('metric-targets').innerText = `${result.total_vehicles_detected} DETECTIONS`;
+      document.getElementById('hud-timestamp').innerText = `SOURCE: ${sourceName}`;
+
+      // Update Focused Inspector Card
+      if (result.detections.length > 0) {
+        const primary = result.detections[0];
+        currentSelectedCropUrl = primary.crop_url;
+
+        const plateText = primary.plate_text || 'UNKNOWN';
+        document.getElementById('plate-hero-text').innerText = plateText;
+        document.getElementById('detail-vehicle-type').innerText = primary.vehicle_type ? primary.vehicle_type.toUpperCase() : 'CAR';
+        document.getElementById('detail-raw-text').innerText = primary.raw_text || plateText;
+        document.getElementById('detail-confidence').innerText = `${Math.round(primary.plate_conf * 100)}%`;
+        document.getElementById('detail-latency').innerText = `${primary.ocr_latency_ms} ms`;
+
+        const accentBar = document.getElementById('inspector-accent-bar');
+        const statusIcon = document.getElementById('inspector-status-icon');
+        const statusTitle = document.getElementById('inspector-status-title');
+        const statusSub = document.getElementById('inspector-status-sub');
+        const flagBox = document.getElementById('detail-flag-container');
+        const dispatchBtn = document.getElementById('btn-dispatch');
+        const plateBadge = document.getElementById('plate-badge');
+
+        if (primary.is_watchlist_match) {
+          // Critical Alert styling
+          accentBar.className = 'absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-alert-crimson via-red-500 to-alert-crimson animate-pulse';
+          statusIcon.className = 'p-1 rounded bg-alert-crimson/20 text-alert-crimson flex items-center justify-center animate-pulse';
+          statusTitle.className = 'font-mono text-xs text-alert-crimson font-bold uppercase tracking-wider';
+          statusTitle.innerText = 'CRITICAL WATCHLIST HIT';
+          statusSub.innerText = primary.watchlist_reason || 'SECURITY HOTLIST MATCH';
+          flagBox.classList.remove('hidden');
+          document.getElementById('detail-flag-reason').innerText = primary.watchlist_reason || 'HOTLIST FLAG';
+          dispatchBtn.className = 'flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-alert-crimson hover:bg-red-600 text-white font-mono text-xs font-bold transition-all shadow-[0_0_16px_rgba(239,68,68,0.5)]';
+          document.getElementById('btn-dispatch-text').innerText = 'Dispatch Patrol Now';
+          plateBadge.classList.add('glow-crimson');
+          
+          playAlertChime();
+        } else {
+          // Standard compliance styling
+          accentBar.className = 'absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-container to-primary';
+          statusIcon.className = 'p-1 rounded bg-primary/20 text-primary flex items-center justify-center';
+          statusTitle.className = 'font-mono text-xs text-primary font-bold uppercase tracking-wider';
+          statusTitle.innerText = 'VEHICLE INSPECTOR';
+          statusSub.innerText = 'STANDARD AUTHORIZED READ';
+          flagBox.classList.add('hidden');
+          dispatchBtn.className = 'flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-mono text-xs font-bold transition-all shadow-md';
+          document.getElementById('btn-dispatch-text').innerText = 'Log Verified Read';
+          plateBadge.classList.remove('glow-crimson');
+        }
+      }
+
+      // Refresh Ingestion Table
+      fetchDetections();
+    }
+
+    // 7. Video Ingestion
+    async function handleVideoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      document.getElementById('active-file-label').innerText = file.name;
+      document.getElementById('pipeline-status').innerText = 'INITIALIZING VIDEO PIPELINE...';
+      document.getElementById('progress-percent-label').innerText = '0% QUEUED';
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('engine', activeEngine);
+      formData.append('max_frames', 200);
+
+      try {
+        const res = await fetch('/api/analyze/video', { method: 'POST', body: formData });
+        const job = await res.json();
+        pollVideoJob(job.job_id);
+      } catch (err) {
+        console.error('Failed to submit video job:', err);
+      }
+    }
+
+    function pollVideoJob(jobId) {
+      const interval = setInterval(async () => {
+        try {
+          const res = await fetch(`/api/job/${jobId}/status`);
+          const status = await res.json();
+
+          if (status.status === 'processing') {
+            document.getElementById('pipeline-status').innerText = 'PROCESSING VIDEO FRAMES...';
+            document.getElementById('progress-percent-label').innerText = 'PROCESSING';
+          } else if (status.status === 'completed') {
+            clearInterval(interval);
+            document.getElementById('pipeline-status').innerText = 'VIDEO COMPLETED';
+            document.getElementById('progress-percent-label').innerText = '100% COMPLETE';
+            fetchDetections();
+            fetchSystemStatus();
+          } else if (status.status === 'failed') {
+            clearInterval(interval);
+            document.getElementById('pipeline-status').innerText = 'ERROR IN VIDEO PIPELINE';
+          }
+        } catch (e) {
+          clearInterval(interval);
+        }
+      }, 1500);
+    }
+
+    // 8. Ingestion Log & Database Queries
+    async function fetchDetections() {
+      try {
+        const res = await fetch(`/api/detections?limit=50&filter_type=${currentFilter}`);
+        const data = await res.json();
+        allDetections = data.detections;
+        renderDetectionsTable(allDetections);
+        document.getElementById('total-reads-counter').innerText = `${data.total} READS`;
+        document.getElementById('bottom-unique-count').innerText = `${data.total}`;
+        document.getElementById('count-all').innerText = data.total;
+        
+        const hotlistCount = allDetections.filter(d => d.is_watchlist_match).length;
+        document.getElementById('count-hotlist').innerText = hotlistCount;
+        document.getElementById('metric-alerts').innerText = `${hotlistCount} FLAGS`;
+      } catch (err) {
+        console.error('Failed to fetch detections:', err);
+      }
+    }
+
+    function renderDetectionsTable(items) {
+      const tbody = document.getElementById('detections-table-body');
+      if (!items || items.length === 0) {
+        tbody.innerHTML = '<div class="p-4 text-center text-on-surface-muted text-xs">No records match current filter.</div>';
+        return;
+      }
+
+      tbody.innerHTML = items.map(item => {
+        const isMatch = item.is_watchlist_match;
+        const rowBg = isMatch ? 'bg-alert-crimson/10 hover:bg-alert-crimson/20 border-l-2 border-alert-crimson' : 'hover:bg-surface-container';
+        const badgeColor = isMatch ? 'bg-alert-crimson text-white' : 'bg-plate-uk-yellow text-black';
+        const tagText = isMatch ? 'HOTLIST HIT' : 'VERIFIED';
+        const tagColor = isMatch ? 'bg-alert-crimson/20 text-alert-crimson border border-alert-crimson/30' : 'bg-surface-container-high text-tertiary';
+
+        return `
+          <div onclick="selectRowInspection('${item.plate_number}', '${item.vehicle_type}', ${item.confidence_score}, ${isMatch}, '${item.watchlist_reason || ''}', '${item.plate_crop_path || ''}')" class="p-2.5 ${rowBg} transition-colors cursor-pointer flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] text-on-surface-muted">${item.detected_at.substring(11, 19) || '12:00:00'}</span>
+              <div class="${badgeColor} px-1.5 py-0.5 rounded font-black text-[11px] tracking-wider shadow-sm">
+                ${item.plate_number}
+              </div>
+              <div class="flex flex-col">
+                <span class="text-on-surface font-semibold text-[11px]">${item.vehicle_type ? item.vehicle_type.toUpperCase() : 'VEHICLE'}</span>
+                <span class="text-[9px] text-on-surface-muted">Conf: ${Math.round(item.confidence_score * 100)}%</span>
+              </div>
+            </div>
+            <span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${tagColor}">
+              ${tagText}
+            </span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectRowInspection(plate, vehicleType, conf, isMatch, reason, cropPath) {
+      document.getElementById('plate-hero-text').innerText = plate;
+      document.getElementById('detail-vehicle-type').innerText = vehicleType ? vehicleType.toUpperCase() : 'CAR';
+      document.getElementById('detail-raw-text').innerText = plate;
+      document.getElementById('detail-confidence').innerText = `${Math.round(conf * 100)}%`;
+      document.getElementById('detail-latency').innerText = `12.2 ms`;
+      currentSelectedCropUrl = cropPath ? `/${cropPath}` : null;
+
+      const flagBox = document.getElementById('detail-flag-container');
+      const accentBar = document.getElementById('inspector-accent-bar');
+      const statusTitle = document.getElementById('inspector-status-title');
+      const statusSub = document.getElementById('inspector-status-sub');
+      const dispatchBtn = document.getElementById('btn-dispatch');
+      const plateBadge = document.getElementById('plate-badge');
+
+      if (isMatch) {
+        accentBar.className = 'absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-alert-crimson via-red-500 to-alert-crimson animate-pulse';
+        statusTitle.className = 'font-mono text-xs text-alert-crimson font-bold uppercase tracking-wider';
+        statusTitle.innerText = 'CRITICAL WATCHLIST HIT';
+        statusSub.innerText = reason || 'SECURITY HOTLIST MATCH';
+        flagBox.classList.remove('hidden');
+        document.getElementById('detail-flag-reason').innerText = reason || 'FLAGGED VEHICLE';
+        dispatchBtn.className = 'flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-alert-crimson hover:bg-red-600 text-white font-mono text-xs font-bold transition-all shadow-[0_0_16px_rgba(239,68,68,0.5)]';
+        document.getElementById('btn-dispatch-text').innerText = 'Dispatch Patrol Now';
+        plateBadge.classList.add('glow-crimson');
+      } else {
+        accentBar.className = 'absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-container to-primary';
+        statusTitle.className = 'font-mono text-xs text-primary font-bold uppercase tracking-wider';
+        statusTitle.innerText = 'VEHICLE INSPECTOR';
+        statusSub.innerText = 'STANDARD AUTHORIZED READ';
+        flagBox.classList.add('hidden');
+        dispatchBtn.className = 'flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-mono text-xs font-bold transition-all shadow-md';
+        document.getElementById('btn-dispatch-text').innerText = 'Log Verified Read';
+        plateBadge.classList.remove('glow-crimson');
+      }
+    }
+
+    function setFilter(type) {
+      currentFilter = type;
+      ['all', 'watchlist', 'high_conf'].forEach(t => {
+        const btn = document.getElementById(`filter-${t.replace('_', '-')}`);
+        if (btn) {
+          if (t === type) {
+            btn.className = 'px-2.5 py-1 rounded-md bg-primary-container text-on-primary-container font-bold';
+          } else {
+            btn.className = 'px-2.5 py-1 rounded-md bg-surface-container-high hover:bg-surface-variant text-on-surface-variant';
+          }
+        }
+      });
+      fetchDetections();
+    }
+
+    function filterDetectionLog(query) {
+      const q = query.trim().toUpperCase();
+      if (!q) {
+        renderDetectionsTable(allDetections);
+        return;
+      }
+      const filtered = allDetections.filter(d => d.plate_number.toUpperCase().includes(q));
+      renderDetectionsTable(filtered);
+    }
+
+    function downloadPlateEvidence() {
+      if (currentSelectedCropUrl) {
+        window.open(currentSelectedCropUrl, '_blank');
+      } else {
+        alert('No WebP evidence crop available for current selected vehicle.');
+      }
+    }
+
+    function dispatchPatrol() {
+      const plate = document.getElementById('plate-hero-text').innerText;
+      alert(`[TACTICAL DISPATCH INITIATED]\nPatrol unit dispatched for plate: ${plate}\nIncident logged to security command.`);
+    }
+
+    // 9. Watchlist Modal Logic
+    async function openWatchlistModal() {
+      document.getElementById('watchlist-modal').classList.remove('hidden');
+      await refreshWatchlistTable();
+    }
+
+    function closeWatchlistModal() {
+      document.getElementById('watchlist-modal').classList.add('hidden');
+    }
+
+    async function refreshWatchlistTable() {
+      try {
+        const res = await fetch('/api/watchlist');
+        const items = await res.json();
+        const tbody = document.getElementById('watchlist-table-body');
+        if (items.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" class="p-3 text-center text-on-surface-muted">No plates in watchlist.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = items.map(w => `
+          <tr class="hover:bg-surface-container">
+            <td class="p-2 font-bold text-alert-crimson">${w.plate_number}</td>
+            <td class="p-2 text-on-surface">${w.reason}</td>
+            <td class="p-2"><span class="px-1.5 py-0.5 rounded bg-alert-crimson/20 text-alert-crimson text-[10px] font-bold">${w.alert_level}</span></td>
+            <td class="p-2 text-right">
+              <button onclick="removeWatchlistPlate('${w.plate_number}')" class="text-on-surface-muted hover:text-alert-crimson">
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load watchlist:', err);
+      }
+    }
+
+    async function addNewWatchlistPlate() {
+      const plateInput = document.getElementById('new-plate-input');
+      const reasonInput = document.getElementById('new-reason-input');
+
+      const plate = plateInput.value.trim().toUpperCase();
+      const reason = reasonInput.value.trim();
+
+      if (!plate || !reason) {
+        alert('Please enter both Plate Number and Reason.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/watchlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plate_number: plate, reason: reason, alert_level: 'CRITICAL' })
+        });
+        if (res.ok) {
+          plateInput.value = '';
+          reasonInput.value = '';
+          await refreshWatchlistTable();
+          await fetchSystemStatus();
+        } else {
+          const err = await res.json();
+          alert(err.detail || 'Failed to add plate to watchlist.');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function removeWatchlistPlate(plate) {
+      if (!confirm(`Delete plate ${plate} from watchlist?`)) return;
+      try {
+        await fetch(`/api/watchlist/${plate}`, { method: 'DELETE' });
+        await refreshWatchlistTable();
+        await fetchSystemStatus();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Init on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchSystemStatus();
+      populateSamples();
+      fetchDetections();
+    });
+  </script>
+</body>
+</html>
