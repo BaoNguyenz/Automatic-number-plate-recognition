@@ -21,7 +21,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTa
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from pydantic import BaseModel
 
 # Ensure project root is in sys.path
@@ -126,8 +126,7 @@ class EngineManager:
                         processor_id="Qwen/Qwen2-VL-2B-Instruct",
                         lora_dir=str(lora_dir) if lora_dir.exists() else None,
                         prompt=config.get("vlm", {}).get("prompt", None),
-                        max_new_tokens=config.get("vlm", {}).get("max_new_tokens", 15),
-                        temperature=config.get("vlm", {}).get("temperature", 0.0)
+                        max_new_tokens=config.get("vlm", {}).get("max_new_tokens", 15)
                     )
         return self.qwen_engine
 
@@ -591,9 +590,27 @@ def _run_video_job(job_id: str, video_path: str, max_frames: int, engine_name: s
         job["status"] = "completed"
         job["progress_percent"] = 100
         job["duration_s"] = round(time.time() - job["start_time"], 2)
+        job["video_url"] = f"/videos/{Path(video_path).name}"
+        if (ROOT / "out.mp4").exists():
+            job["annotated_video_url"] = "/videos/out.mp4"
     except Exception as e:
         job["status"] = "failed"
         job["error"] = str(e)
+
+
+@app.get("/videos/{video_name}")
+async def serve_video(video_name: str):
+    """Streams video file supporting HTML5 range seeking."""
+    p1 = ROOT / video_name
+    p2 = ROOT / "media" / video_name
+    if p1.exists() and p1.is_file():
+        target = p1
+    elif p2.exists() and p2.is_file():
+        target = p2
+    else:
+        raise HTTPException(status_code=404, detail=f"Video file '{video_name}' not found")
+
+    return FileResponse(path=str(target), media_type="video/mp4")
 
 
 @app.post("/api/analyze/video")
