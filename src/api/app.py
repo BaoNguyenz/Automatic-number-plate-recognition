@@ -263,6 +263,10 @@ async def get_detections(
             else:
                 v_time = "IMG"
 
+            crop_p = (r.plate_crop_path or "").replace("\\", "/")
+            if "media/" in crop_p:
+                crop_p = crop_p[crop_p.index("media/"):]
+
             data.append({
                 "id": r.id,
                 "car_id": r.car_id,
@@ -273,7 +277,7 @@ async def get_detections(
                 "vehicle_color": r.vehicle_color,
                 "frame_number": fn,
                 "video_timestamp": v_time,
-                "plate_crop_path": r.plate_crop_path,
+                "plate_crop_path": crop_p,
                 "detected_at": r.detected_at.strftime("%Y-%m-%d %H:%M:%S") if r.detected_at else "",
                 "is_watchlist_match": bool(r.is_watchlist_match),
                 "watchlist_reason": r.watchlist_reason
