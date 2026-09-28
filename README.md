@@ -1,28 +1,34 @@
-# 🚗 ANPR Sentry Tactical — Real-Time License Plate Recognition & Surveillance
+# 🚗 ANPR Sentry Tactical — Real-Time License Plate Recognition & Surveillance System
 
 <p align="left">
-  <a href="#-ci-cd-pipeline">
+  <a href="#-automated-cicd--container-delivery">
     <img src="https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=githubactions&logoColor=white" alt="CI/CD">
   </a>
-  <a href="#-tech-stack">
+  <a href="#-technology-stack">
     <img src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white" alt="Python">
   </a>
-  <a href="#-tech-stack">
+  <a href="#-technology-stack">
     <img src="https://img.shields.io/badge/PyTorch-2.4%2Bcu124-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch">
   </a>
-  <a href="#-tech-stack">
+  <a href="#-technology-stack">
     <img src="https://img.shields.io/badge/NVIDIA-TensorRT_11.3_FP16-76B900?logo=nvidia&logoColor=white" alt="TensorRT">
   </a>
-  <a href="#-tech-stack">
+  <a href="#-technology-stack">
+    <img src="https://img.shields.io/badge/VLM-Qwen2--VL--2B--Instruct-blueviolet?logo=huggingface&logoColor=white" alt="Qwen2-VL">
+  </a>
+  <a href="#-technology-stack">
+    <img src="https://img.shields.io/badge/OCR-PaddleOCR_PP--OCRv6-red?logo=baidu&logoColor=white" alt="PaddleOCR">
+  </a>
+  <a href="#-technology-stack">
     <img src="https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white" alt="FastAPI">
   </a>
   <a href="#-docker-compose-deployment">
     <img src="https://img.shields.io/badge/Docker-GPU_Enabled-2496ED?logo=docker&logoColor=white" alt="Docker">
   </a>
-  <a href="#-testing--code-quality">
+  <a href="#-testing--verification-suite">
     <img src="https://img.shields.io/badge/Pytest-19_Passed-0A9EDC?logo=pytest&logoColor=white" alt="Pytest">
   </a>
-  <a href="#-testing--code-quality">
+  <a href="#-testing--verification-suite">
     <img src="https://img.shields.io/badge/Pylint-10.00%2F10-brightgreen?logo=python&logoColor=white" alt="Pylint">
   </a>
   <a href="#-license">
@@ -30,26 +36,19 @@
   </a>
 </p>
 
-> **High-throughput, edge-optimized Automatic Number Plate Recognition (ANPR/ALPR) and intelligent traffic surveillance platform.**  
-> Completely modernizes legacy, fragile OpenCV thresholding and heuristic OCR into a high-performance system powered by **TensorRT FP16 acceleration (<3ms)**, **ByteTrack multi-object tracking**, an adaptive **Laplacian/Scale Best-Frame Selector**, and **Dual Recognition Engines (PaddleOCR & Fine-Tuned 4-bit Qwen2-VL)** with real-time **Security Watchlist Alerting** and an interactive cyber-dark command dashboard.
+**ANPR Sentry Tactical** is a high-throughput, edge-optimized Automatic Number Plate Recognition (ANPR/ALPR) and intelligent traffic surveillance platform. Completely modernizing legacy, fragile OpenCV thresholding and heuristic OCR, the system integrates:
+- **Dual TensorRT FP16 Vision Engines (<3ms)** for parallel vehicle and localized license plate detection (200+ FPS throughput)
+- **ByteTrack Multi-Object Tracking** with Kalman filtering and two-stage Hungarian association for persistent track ID retention across occlusions
+- **Adaptive Laplacian/Scale Best-Frame Selection** pooling candidate crops to eliminate motion blur and reduce downstream recognition compute by **>95%**
+- **Dual Modular Recognition Engines:** Ultra-fast lightweight **PaddleOCR (PP-OCRv6)** (~25ms) and SOTA **Fine-Tuned 4-bit Qwen2-VL (QLoRA)** achieving **80.8% Exact Match** on raw RGB crops without thresholding
+- **Real-Time Security Watchlist Interception** flagging stolen vehicles (`CRITICAL`) and toll violators (`WARNING`) with database auditing
+- **FastAPI Mission-Control Command Center** with cyber-dark obsidian glassmorphism, live telemetry, and lossless WebP edge storage
 
 ---
 
-## ⚡ Core Features
+## 🏗️ Architecture Overview
 
-- **Sub-3ms TensorRT Inference:** YOLOv8n vehicle & plate detection compiled with TensorRT FP16 (200+ FPS throughput).
-- **Persistent ByteTrack Tracking:** Multi-object tracking across occlusions with 4D trajectory linear interpolation gap-filling.
-- **Adaptive Best-Frame Selector:** Pools candidate crops using Laplacian variance (sharpness) and pixel area, cutting recognition compute by **>95%**.
-- **Dual Modular OCR/VLM Engines:**
-  - **PaddleOCR (PP-OCRv6):** Ultra-fast lightweight inference (~25ms).
-  - **Qwen2-VL-2B (QLoRA 4-bit):** SOTA multi-modal vision-language recognition achieving **80.8% Exact Match** on raw RGB crops without thresholding.
-- **Real-Time Security Watchlist:** Instant interception of stolen vehicles (`CRITICAL`) and toll violators (`WARNING`) with database auditing.
-- **Modern Tactical Web Dashboard:** FastAPI backend with cyber-dark obsidian glassmorphism, real-time telemetry, and sample testing gallery.
-- **Production CI/CD & Docker:** GitHub Actions pipeline (Pylint 10/10 & Pytest 19/19) with one-click Docker Compose GPU deployment.
-
----
-
-## 🏗️ Architecture & Tech Stack
+The system operates on an authentic multi-stage pipeline separating **Perception & Tracking** from **Quality Selection & Dual Recognition**:
 
 ```mermaid
 flowchart LR
@@ -111,86 +110,115 @@ flowchart LR
    - **Security Watchlist Interceptor:** Real-time flagging of stolen vehicles (`CRITICAL`) or toll violators (`WARNING`).
    - **Presentation:** Real-time FastAPI Tactical Dashboard (`http://localhost:8000`) and 4D trajectory-interpolated HUD video rendering.
 
-### Tech Stack
+---
 
-| Component | Technologies |
-| :--- | :--- |
-| **Vision & Acceleration** | NVIDIA TensorRT 11.3 (FP16), PyTorch 2.4, Ultralytics YOLOv8, OpenCV |
-| **Object Tracking** | ByteTrack, SciPy (4D Linear Spline Interpolation) |
-| **Character Recognition** | Qwen2-VL-2B (4-bit BitsAndBytes QLoRA), PaddleOCR (PP-OCRv6) |
-| **Backend & Dashboard** | FastAPI, Uvicorn, Jinja2, Vanilla CSS (Obsidian Glassmorphism) |
-| **Database & Storage** | SQLAlchemy 2.0 (SQLite / PostgreSQL), WebP Lossless Storage |
-| **DevOps & Testing** | Docker, Docker Compose, GitHub Actions, Pylint, PyTest |
+## 🌟 Key Features
+
+*   **⚡ Sub-3ms TensorRT Inference:** YOLOv8 compiled into TensorRT FP16 engines • 2.4ms vehicle detection • 2.7ms plate detection • >200 FPS raw capability.
+*   **🎯 Persistent ByteTrack Tracking:** Kalman filter trajectory prediction • High/low confidence two-stage matching • Robust across camera occlusions.
+*   **🔍 Adaptive Best-Frame Selector:** Real-time Laplacian sharpness scoring $\text{Var}(\nabla^2 I)$ • Pixel area scaling • 1 optimal crop per vehicle • >95% compute reduction.
+*   **🧠 Dual Recognition Engines:** Fast PaddleOCR (~25ms) or SOTA Fine-Tuned Qwen2-VL-2B (QLoRA 4-bit) • 80.8% Exact Match • Direct raw RGB processing.
+*   **🚨 Real-Time Security Watchlist:** Instant database interception for Stolen Vehicles (`CRITICAL`) and Toll Evasion (`WARNING`) • Terminal & HUD pulsing alerts.
+*   **🌐 Obsidian Tactical Dashboard:** FastAPI asynchronous backend • Cyber-dark telemetry interface • Interactive image testing gallery & REST APIs.
+*   **📈 Full-Stack Quality & CI/CD:** GitHub Actions automated pipeline • 10.00/10 Pylint score • 19/19 Pytest test suite • Automated GHCR container packaging.
 
 ---
 
-## 🚀 Quick Start (Installation)
+## 📊 Dataset & Model Specifications
 
-### Option A: Local Installation (Recommended for Development)
+The surveillance AI pipeline operates with hardware-optimized vision models and verified ground-truth datasets:
 
-```bash
-# 1. Clone repository
-git clone https://github.com/BaoNguyenz/Automatic-number-plate-recognition.git
-cd "Automatic-number-plate-recognition"
+<div align="center">
 
-# 2. Create and activate conda environment
-conda create -n anpr python=3.10 -y
-conda activate anpr
+| Component / Layer | Model / Asset | Specifications | Latency / Size |
+| :--- | :--- | :--- | :---: |
+| **Vehicle Detector** | `yolov8n.engine` | TensorRT 11.3 FP16, Input: $640 \times 640$, 4 Classes (Car, Bus, Truck, Moto) | **2.4 ms** (~6.2 MB) |
+| **Plate Detector** | `license_plate_detector.engine` | TensorRT 11.3 FP16, Input: $640 \times 640$, 1 Class (`license_plate`) | **2.7 ms** (~6.2 MB) |
+| **Fast OCR Engine** | `PaddleOCR PP-OCRv6` | DBNet Text Detection + SVTR Text Recognition (Mobile Net) | **~25 ms** (~15 MB) |
+| **SOTA VLM Engine** | `Qwen2-VL-2B-Instruct` | 4-bit BitsAndBytes QLoRA Adapter (PEFT fine-tuned in 88.2s) | **380 ms** (1.50 GB VRAM) |
+| **Surveillance Stream** | Highway 4K Stream | $3840 \times 2160$ @ 30 FPS, H.264 UHD video | 30 FPS real-time |
+| **Benchmark Ground Truth** | 26 Surveillance Crops | Real-world conditions: 45° angles, motion blur, glare, night contrast | 26 verified pairs |
+| **Edge Storage Format** | WebP Lossless (`q=85`) | Date-partitioned image archive (`media/plates/YYYY/MM/DD/`) | **~1.5 KB / crop** |
+| **Relational Database** | SQLAlchemy ORM | SQLite (`data/anpr.db`) portable, seamless switch to PostgreSQL | Instant indexing |
 
-# 3. Install PyTorch with CUDA 12.4
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
-
-# 4. Install dependencies
-pip install -r requirements.txt
-```
-
-### Option B: Docker Compose (One-Click GPU Deployment)
-
-```bash
-# Build and start container with NVIDIA GPU passthrough
-docker compose up -d
-
-# Check live logs
-docker compose logs -f
-```
+</div>
 
 ---
 
-## 💻 Usage
+## 📊 Comprehensive Benchmark & Evaluation (26 Ground-Truth Surveillance Crops)
 
-### 1. Launch the Mission-Control Web Dashboard
+Evaluated on **26 challenging real-world crops** extracted from 4K traffic surveillance footage (including extreme angles, motion blur, nighttime glare, and low contrast):
 
-```bash
-python -m uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
-```
-Navigate to **`http://localhost:8000`** in your browser.
+<div align="center">
+
+| Recognition Engine | Preprocessing Method | Exact Match (%) | Character Accuracy (%) | Average Latency | Peak VRAM |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **EasyOCR (Baseline cũ)** | Grayscale + Binary Thresholding (`thresh=64`) | **15.4%** (4/26) | 71.2% | **36.1 ms** | ~0.8 GB |
+| **PaddleOCR (PP-OCRv6)** ⚡ | **Raw RGB Crop (Adaptive Predictor)** | **34.6%** (9/26) | **86.2%** | **24.8 ms** | **~0.6 GB** |
+| **Qwen2-VL-2B (Zero-Shot)** | Raw RGB Crop (No thresholding) | **57.7%** (15/26) | 90.7% | 257.6 ms | **1.44 GB** |
+| **Qwen2-VL-2B (QLoRA 4-bit)** 🔥 | **Raw RGB Crop (Fine-Tuned)** | **80.8%** (21/26) | **96.7%** | **380.4 ms** | **1.50 GB** |
+
+</div>
+
+### 🏆 Key Benchmark Takeaways
+
+1. **The Death of Binary Thresholding:** Rigid binary thresholding (`cv2.threshold`) severely degraded dark and overexposed characters, confusing `0` with `O`, `1` with `I`, and `6` with `G`. Passing raw RGB crops directly to neural models preserved essential character stroke geometry.
+2. **PaddleOCR vs EasyOCR:** PaddleOCR (PP-OCRv6) more than doubles EasyOCR's exact-match rate (**15.4% ➡️ 34.6%**, +19.2%) and boosts character accuracy to **86.2%**, correctly identifying critical watchlist targets like stolen vehicle `SC56DYP`.
+3. **QLoRA Fine-Tuning Impact:** In just **88.2 seconds of training** on an NVIDIA RTX 3060, the 4-bit QLoRA adapter boosted exact-match recognition from **57.7% to 80.8% (+23.1%)** while driving character-level accuracy to **96.7%**.
+4. **Best-Frame Selector Efficiency:** Rather than executing OCR on all 1,800 frames per vehicle trajectory, the Best-Frame Selector pools candidate crops and invokes recognition **exactly once per vehicle**, reducing total compute overhead by **>95%**.
 
 ---
 
-### 2. Run Video Stream Inference Pipeline (CLI)
+## ⚡ Master Execution CLI & Commands
+
+The platform provides a unified CLI suite for pipeline execution, benchmark evaluation, and engine optimization:
 
 ```bash
-# Run with PaddleOCR Engine (Fastest)
+# 1. Master Video Pipeline — Run with PaddleOCR Engine (Fastest):
 python scripts/run_pipeline.py --engine paddleocr --video 2103099-uhd_3840_2160_30fps.mp4
 
-# Run with Fine-Tuned Qwen2-VL VLM Engine (Highest Accuracy)
+# 2. Master Video Pipeline — Run with Fine-Tuned Qwen2-VL (Highest Accuracy 80.8%):
 python scripts/run_pipeline.py --engine qwen2_vl --video 2103099-uhd_3840_2160_30fps.mp4
 
-# Quick test on first 300 frames
+# 3. Fast Smoke Test — Run on first 300 frames:
 python scripts/run_pipeline.py --max-frames 300
+
+# 4. Model Benchmarking — Evaluate PaddleOCR on 26 ground-truth crops:
+python scripts/benchmark_paddleocr.py
+
+# 5. Model Benchmarking — Evaluate Base vs QLoRA Qwen2-VL:
+python scripts/evaluate_finetune.py
+
+# 6. TensorRT Compilation — Build hardware-optimized .engine from ONNX:
+python scripts/export_tensorrt.py
+
+# 7. Database Audit — Terminal inspection of SQLite records and watchlist hits:
+python scripts/view_db.py
 ```
 
 ---
 
-### 3. RESTful API Examples
+## 🔭 System Telemetry & Watchlist Interception
 
-#### A. Recognize License Plate from Image
+The FastAPI backend exposes real-time telemetry and programmatic REST endpoints for surveillance monitoring:
+
+### 1. System Health & Device Telemetry (`GET /api/system/status`)
+```json
+{
+  "status": "online",
+  "device": "NVIDIA GeForce RTX 3060",
+  "active_engine": "paddleocr",
+  "total_detections": 142,
+  "watchlist_hits": 8
+}
+```
+
+### 2. Single Image License Plate Recognition (`POST /api/recognize`)
 ```bash
 curl -X POST "http://localhost:8000/api/recognize" \
      -H "accept: application/json" \
      -F "file=@benchmark_crops/car_1701_SC56DYP_0.71.jpg"
 ```
-**Sample JSON Response:**
 ```json
 {
   "total_vehicles": 1,
@@ -211,122 +239,108 @@ curl -X POST "http://localhost:8000/api/recognize" \
 }
 ```
 
-#### B. Query System Health & Telemetry
-```bash
-curl -X GET "http://localhost:8000/api/system/status"
-```
-```json
-{
-  "status": "online",
-  "device": "NVIDIA GeForce RTX 3060",
-  "active_engine": "paddleocr",
-  "total_detections": 142,
-  "watchlist_hits": 8
-}
-```
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Vision Acceleration** | **NVIDIA TensorRT 11.3 (FP16)** | Sub-3ms hardware-accelerated deep learning inference on CUDA cores |
+| **Perception Models** | **Ultralytics YOLOv8n** | Real-time vehicle detection (4 classes) and dedicated license plate detection |
+| **Multi-Object Tracking** | **ByteTrack** | Kalman filter state estimation & Hungarian association across occlusions |
+| **Spatial Algorithms** | **SciPy**, **NumPy** | 4D trajectory linear interpolation (spline gap-filling) & Laplacian variance |
+| **SOTA VLM Recognition** | **Qwen2-VL-2B (4-bit QLoRA)** | Multi-modal vision-language character recognition on raw RGB crops |
+| **Lightweight OCR** | **PaddleOCR (PP-OCRv6)** | Ultra-fast mobile text detection and recognition (~25ms) |
+| **Backend & Web Server** | **FastAPI**, **Uvicorn** | High-concurrency asynchronous RESTful API & Server-Sent Events (SSE) |
+| **Frontend UI** | **Jinja2**, **Vanilla CSS** | Mission-control cyber-dark obsidian glassmorphic surveillance dashboard |
+| **Database & ORM** | **SQLAlchemy 2.0** | Decoupled database persistence supporting SQLite (`anpr.db`) and PostgreSQL |
+| **Edge Storage** | **Pillow WebP (Lossless)** | Date-partitioned vehicle crop compression (~1.5 KB/plate, 70% space saving) |
+| **Containerization** | **Docker**, **Docker Compose** | Production CUDA 12.4 container with NVIDIA Container Toolkit GPU passthrough |
+| **Automated CI/CD** | **GitHub Actions**, **GHCR** | Automated Pylint code quality gate (10/10), Pytest verification, and free container packaging |
 
 ---
 
-## ⚙️ Configuration
+## 🔄 Automated CI/CD & Container Delivery
 
-Key settings can be modified in [`config/config.yaml`](file:///e:/LET_ME_COOK/Automatic%20number%20plate%20recognition/config/config.yaml) or via environment variables:
+The repository includes a production **Continuous Integration & Continuous Delivery (CI/CD)** pipeline powered by GitHub Actions:
 
-```yaml
-# Hardware & Vision Engines
-device: "cuda:0"
-use_tensorrt: true
-yolo_vehicle_engine: "Weight/yolov8n.engine"
-yolo_plate_engine: "Licence_plate_detection/license_plate_detector.engine"
-
-# Tracking & Quality Selection
-conf_threshold: 0.35
-iou_threshold: 0.45
-laplacian_blur_threshold: 45.0
-min_plate_area: 1200
-
-# Recognition Engine & Database
-recognition_engine: "paddleocr"    # Options: "paddleocr" | "qwen2_vl"
-database_url: "sqlite:///data/anpr.db"
-storage_dir: "media/plates"
-```
-
----
-
-## 📂 Project Directory Structure
-
-```text
-Automatic-number-plate-recognition/
-├── .github/workflows/
-│   └── ci.yml                    # Unified CI/CD Pipeline (Pylint, PyTest, GHCR Delivery)
-├── config/
-│   └── config.yaml               # System parameters & thresholds
-├── docs/assets/                  # Dashboard screenshots & diagrams
-├── src/
-│   ├── api/
-│   │   ├── app.py                # FastAPI server & REST API endpoints
-│   │   ├── templates/            # Cyber-dark HTML5 Dashboard UI
-│   │   └── static/               # CSS Design System & JavaScript
-│   ├── database/
-│   │   ├── models.py             # SQLAlchemy models (VehicleDetection & Watchlist)
-│   │   └── connection.py         # Thread-safe session factory & auto-seeder
-│   ├── vision/
-│   │   ├── detector.py           # TensorRT FP16 detector with PyTorch fallback
-│   │   └── tracker.py            # ByteTrack & Laplacian Best-Frame Selector
-│   ├── recognition/
-│   │   ├── paddle_engine.py      # Lightweight PaddleOCR (PP-OCRv6) Engine
-│   │   ├── qwen2_vl_engine.py    # 4-bit Qwen2-VL Engine with QLoRA Adapter
-│   │   └── postprocessor.py      # Regex cleaning & UK format validation
-│   └── utils/
-│       ├── interpolator.py       # Trajectory linear interpolator (gap-filling)
-│       ├── storage.py            # WebP date-partitioned storage manager
-│       └── visualizer.py         # Corner-accent bounding boxes & HUD overlay
-├── scripts/
-│   ├── run_pipeline.py           # Master video processing pipeline
-│   ├── export_tensorrt.py        # ONNX to TensorRT engine builder
-│   ├── finetune_qwen2_vl.py      # 4-bit QLoRA fine-tuning script
-│   └── benchmark_paddleocr.py    # 26-crop benchmark evaluator
-├── tests/                        # PyTest Unit & Integration test suite (19 tests)
-├── benchmark_crops/              # Labeled 4K surveillance evaluation crops
-├── Dockerfile                    # Production CUDA 12.4 Docker container
-└── docker-compose.yml            # Multi-service container orchestration
+```mermaid
+flowchart LR
+    Dev[💻 Developer Push\nbranch: develop / main] --> GHA[⚙️ GitHub Actions Runner]
+    
+    subgraph CI ["1. Continuous Integration (Parallel Quality Gate)"]
+        direction TB
+        GHA --> Setup[Setup Python 3.10 & Pip Cache]
+        Setup --> Lint["Job 1: Pylint Static Analysis\nScore: 10.00 / 10.00"]
+        Setup --> Pytest["Job 2: Pytest Automated Suite\n19 / 19 Tests Passed"]
+    end
+    
+    subgraph CD ["2. Continuous Delivery (100% Free - No Cloud Fees)"]
+        Lint & Pytest --> Check{"Pass & Branch == main?"}
+        Check -->|Yes| Build["Job 3: Docker Buildx with GHA Cache\nghcr.io/baonguyenz/...:latest"]
+        Check -->|No| Done["Done (Quality Gate Passed)"]
+    end
 ```
 
 ---
 
-## 📊 Benchmark & Evaluation Results
+## 🚀 Quick Start Guide
 
-Evaluated on **26 challenging real-world crops** extracted from 4K traffic surveillance footage (extreme angles, motion blur, nighttime glare, and low contrast):
+### Prerequisites
+- [NVIDIA Driver](https://www.nvidia.com/Download/index.aspx) (CUDA 12.4+ supported)
+- [Docker Engine](https://docs.docker.com/engine/install/) & [Docker Compose v2](https://docs.docker.com/compose/) (with [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html))
+- Or local [Miniconda / Anaconda](https://docs.conda.io/en/latest/miniconda.html)
 
-| Recognition Engine | Preprocessing Method | Exact Match (%) | Character Accuracy (%) | Average Latency | Peak VRAM |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **EasyOCR (Baseline)** | Grayscale + Binary Thresholding | **15.4%** (4/26) | 71.2% | 36.1 ms | ~0.8 GB |
-| **PaddleOCR (PP-OCRv6)** ⚡ | **Raw RGB (Adaptive Predictor)** | **34.6%** (9/26) | **86.2%** | **24.8 ms** | **~0.6 GB** |
-| **Qwen2-VL-2B (Zero-Shot)** | Raw RGB Crop | **57.7%** (15/26) | 90.7% | 257.6 ms | **1.44 GB** |
-| **Qwen2-VL-2B (QLoRA 4-bit)** 🔥 | **Raw RGB Crop (Fine-Tuned)** | **80.8%** (21/26) | **96.7%** | **380.4 ms** | **1.50 GB** |
-
-> [!NOTE]
-> **Key Insight:** Rigid binary thresholding degrades stroke edges and confuses visually similar characters (`0` vs `O`, `6` vs `G`, `5` vs `S`). Feeding raw RGB crops into modern deep learning models (PaddleOCR / Qwen2-VL) yields a **+65.4% exact match improvement**.
-
----
-
-## 🧪 Testing & Code Quality
+### 1. Run with Docker Compose (Recommended)
 
 ```bash
-# Run complete test suite (19 unit & integration tests)
-pytest tests/ -v
+# 1. Clone repository
+git clone https://github.com/BaoNguyenz/Automatic-number-plate-recognition.git
+cd "Automatic-number-plate-recognition"
 
-# Run Pylint static analysis (Rated 10.00/10)
-pylint src/ --rcfile=.pylintrc
+# 2. Build and launch with NVIDIA GPU acceleration
+docker compose up -d
+
+# 3. View live server logs
+docker compose logs -f
+```
+Open **`http://localhost:8000`** in your browser to access the Tactical Command Dashboard.
+
+---
+
+### 2. Local Environment Setup (Conda)
+
+```bash
+# 1. Create and activate conda environment
+conda create -n anpr python=3.10 -y
+conda activate anpr
+
+# 2. Install PyTorch with CUDA 12.4
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+
+# 3. Install core dependencies
+pip install -r requirements.txt
+
+# 4. Launch the web dashboard locally
+python -m uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ---
 
-## 🤝 Contributing & License
+## 🧪 Testing & Verification Suite
 
-1. Fork the Project & create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-2. Commit your Changes (`git commit -m 'feat: Add AmazingFeature'`)
-3. Ensure all tests and linter pass (`pytest tests/ && pylint src/ --rcfile=.pylintrc`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request to `develop`
+Run automated test suites to verify each layer of the pipeline independently:
 
-Distributed under the **MIT License**. See `LICENSE` for more information.
+```bash
+# --- Unit & Integration Tests (Pytest - 19 Tests) ---
+pytest tests/ -v                                     # Full API, Database, PostProcessor, & Visualizer test suite
+
+# --- Code Quality & Static Analysis (Pylint - 10.00/10) ---
+pylint src/ --rcfile=.pylintrc                       # Enforces syntax and CV/ML design standards
+```
+
+---
+
+## 📄 License & Acknowledgments
+
+This project is licensed under the **MIT License**. Developed as an Enterprise Edge-Optimized ANPR and Surveillance System integrating TensorRT acceleration, ByteTrack tracking, multi-modal Vision-Language Models, and automated CI/CD container delivery.
