@@ -1,7 +1,36 @@
+# Videos & Media
 2103099-uhd_3840_2160_30fps.mp4
 out.mp4
 bus.jpg
-Licence_plate_detection
-__pycache__
+media/
+*.mp4
+*.avi
+
+# Model weights & Engines
+Weight/
+Licence_plate_detection/
+*.engine
+*.onnx
+*.pt
+
+# Database & Generated Datasets
+data/*.db
+data/*.csv
+data/finetune_dataset/
+
+# Deprecated / Legacy files
+legacy/
 sort/
+Csv_results/
 trial.ipynb
+
+# Python cache & logs
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+.system_generated/
+scratch/
+.env
+.venv
+.pytest_cache/

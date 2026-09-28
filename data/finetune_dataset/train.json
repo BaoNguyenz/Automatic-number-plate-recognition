@@ -1,0 +1,1682 @@
+[
+  {
+    "id": "sample_104",
+    "image": "images/crop_0104_KH05ZTK.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH05ZTK"
+      }
+    ]
+  },
+  {
+    "id": "sample_113",
+    "image": "images/crop_0113_KH05ZZK.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH05ZZK"
+      }
+    ]
+  },
+  {
+    "id": "sample_84",
+    "image": "images/crop_0084_MT51VSU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "MT51VSU"
+      }
+    ]
+  },
+  {
+    "id": "sample_63",
+    "image": "images/bench_0063_EF10DZT.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EF10DZT"
+      }
+    ]
+  },
+  {
+    "id": "sample_39",
+    "image": "images/bench_0039_NA54KGJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA54KGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_105",
+    "image": "images/crop_0105_LM13VCV.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LM13VCV"
+      }
+    ]
+  },
+  {
+    "id": "sample_82",
+    "image": "images/crop_0082_NA13NRU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA13NRU"
+      }
+    ]
+  },
+  {
+    "id": "sample_138",
+    "image": "images/crop_0138_EY61NBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_124",
+    "image": "images/crop_0124_EY61NBC.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBC"
+      }
+    ]
+  },
+  {
+    "id": "sample_127",
+    "image": "images/crop_0127_FJ14ZHY.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "FJ14ZHY"
+      }
+    ]
+  },
+  {
+    "id": "sample_134",
+    "image": "images/crop_0134_EY61NBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_128",
+    "image": "images/crop_0128_EY61NBC.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBC"
+      }
+    ]
+  },
+  {
+    "id": "sample_66",
+    "image": "images/bench_0066_KH06KSU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH06KSU"
+      }
+    ]
+  },
+  {
+    "id": "sample_119",
+    "image": "images/crop_0119_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_118",
+    "image": "images/crop_0118_KH05ZZK.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH05ZZK"
+      }
+    ]
+  },
+  {
+    "id": "sample_1",
+    "image": "images/bench_0001_EY06VVS_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY06VVS"
+      }
+    ]
+  },
+  {
+    "id": "sample_61",
+    "image": "images/bench_0061_DA07CLX_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "DA07CLX"
+      }
+    ]
+  },
+  {
+    "id": "sample_95",
+    "image": "images/crop_0095_AF05JEC.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AF05JEC"
+      }
+    ]
+  },
+  {
+    "id": "sample_94",
+    "image": "images/crop_0094_GY15OCJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GY15OCJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_42",
+    "image": "images/bench_0042_LM13VCV.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LM13VCV"
+      }
+    ]
+  },
+  {
+    "id": "sample_131",
+    "image": "images/crop_0131_EY61NBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_100",
+    "image": "images/crop_0100_LM13VCV.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LM13VCV"
+      }
+    ]
+  },
+  {
+    "id": "sample_74",
+    "image": "images/bench_0074_LN15ZZC_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LN15ZZC"
+      }
+    ]
+  },
+  {
+    "id": "sample_129",
+    "image": "images/crop_0129_EY61MBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61MBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_38",
+    "image": "images/bench_0038_AF65JKV_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AF65JKV"
+      }
+    ]
+  },
+  {
+    "id": "sample_18",
+    "image": "images/bench_0018_NL64OGX.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NL64OGX"
+      }
+    ]
+  },
+  {
+    "id": "sample_30",
+    "image": "images/bench_0030_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_32",
+    "image": "images/bench_0032_AP05JEO_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_120",
+    "image": "images/crop_0120_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_51",
+    "image": "images/bench_0051_OU62HYJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "OU62HYJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_130",
+    "image": "images/crop_0130_FJ16ZHY.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "FJ16ZHY"
+      }
+    ]
+  },
+  {
+    "id": "sample_60",
+    "image": "images/bench_0060_DA07CLX.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "DA07CLX"
+      }
+    ]
+  },
+  {
+    "id": "sample_85",
+    "image": "images/crop_0085_MO51MSU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "MO51MSU"
+      }
+    ]
+  },
+  {
+    "id": "sample_16",
+    "image": "images/bench_0016_CE61LYL_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "CE61LYL"
+      }
+    ]
+  },
+  {
+    "id": "sample_64",
+    "image": "images/bench_0064_EF10DZT_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EF10DZT"
+      }
+    ]
+  },
+  {
+    "id": "sample_126",
+    "image": "images/crop_0126_EY61NBC.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBC"
+      }
+    ]
+  },
+  {
+    "id": "sample_133",
+    "image": "images/crop_0133_EY61NBC.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBC"
+      }
+    ]
+  },
+  {
+    "id": "sample_31",
+    "image": "images/bench_0031_AP05JEO_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_41",
+    "image": "images/bench_0041_NA54KGJ_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA54KGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_67",
+    "image": "images/bench_0067_KH06KSU_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH06KSU"
+      }
+    ]
+  },
+  {
+    "id": "sample_36",
+    "image": "images/bench_0036_AF65JKV.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AF65JKV"
+      }
+    ]
+  },
+  {
+    "id": "sample_101",
+    "image": "images/crop_0101_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_4",
+    "image": "images/bench_0004_BP63LYH_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "BP63LYH"
+      }
+    ]
+  },
+  {
+    "id": "sample_56",
+    "image": "images/bench_0056_NA13NRU_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA13NRU"
+      }
+    ]
+  },
+  {
+    "id": "sample_125",
+    "image": "images/crop_0125_FJ14ZHY.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "FJ14ZHY"
+      }
+    ]
+  },
+  {
+    "id": "sample_50",
+    "image": "images/bench_0050_GJ06EPD_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GJ06EPD"
+      }
+    ]
+  },
+  {
+    "id": "sample_2",
+    "image": "images/bench_0002_EY06VVS_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY06VVS"
+      }
+    ]
+  },
+  {
+    "id": "sample_52",
+    "image": "images/bench_0052_OU62HYJ_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "OU62HYJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_3",
+    "image": "images/bench_0003_BP63LYH.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "BP63LYH"
+      }
+    ]
+  },
+  {
+    "id": "sample_49",
+    "image": "images/bench_0049_GJ06EPD_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GJ06EPD"
+      }
+    ]
+  },
+  {
+    "id": "sample_121",
+    "image": "images/crop_0121_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_102",
+    "image": "images/crop_0102_LM13VCV.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LM13VCV"
+      }
+    ]
+  },
+  {
+    "id": "sample_14",
+    "image": "images/bench_0014_NG65ZFX_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NG65ZFX"
+      }
+    ]
+  },
+  {
+    "id": "sample_72",
+    "image": "images/bench_0072_LN15ZZC.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LN15ZZC"
+      }
+    ]
+  },
+  {
+    "id": "sample_96",
+    "image": "images/crop_0096_GY15OGJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GY15OGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_40",
+    "image": "images/bench_0040_NA54KGJ_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA54KGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_17",
+    "image": "images/bench_0017_CE61LYL_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "CE61LYL"
+      }
+    ]
+  },
+  {
+    "id": "sample_81",
+    "image": "images/crop_0081_NV51VSU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NV51VSU"
+      }
+    ]
+  },
+  {
+    "id": "sample_117",
+    "image": "images/crop_0117_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_76",
+    "image": "images/bench_0076_KH05ZZK_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH05ZZK"
+      }
+    ]
+  },
+  {
+    "id": "sample_90",
+    "image": "images/crop_0090_GX15OGJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GX15OGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_87",
+    "image": "images/crop_0087_GX15OGJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GX15OGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_65",
+    "image": "images/bench_0065_EF10DZT_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EF10DZT"
+      }
+    ]
+  },
+  {
+    "id": "sample_21",
+    "image": "images/bench_0021_NL64OGX.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NL64OGX"
+      }
+    ]
+  },
+  {
+    "id": "sample_9",
+    "image": "images/bench_0009_LP14LJA.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LP14LJA"
+      }
+    ]
+  },
+  {
+    "id": "sample_34",
+    "image": "images/bench_0034_EY61NBG_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_135",
+    "image": "images/crop_0135_EY61NBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_114",
+    "image": "images/crop_0114_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_47",
+    "image": "images/bench_0047_AK64DMV_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AK64DMV"
+      }
+    ]
+  },
+  {
+    "id": "sample_110",
+    "image": "images/crop_0110_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_123",
+    "image": "images/crop_0123_KH05ZZK.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH05ZZK"
+      }
+    ]
+  },
+  {
+    "id": "sample_92",
+    "image": "images/crop_0092_KH35ZIK.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH35ZIK"
+      }
+    ]
+  },
+  {
+    "id": "sample_106",
+    "image": "images/crop_0106_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_109",
+    "image": "images/crop_0109_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_98",
+    "image": "images/crop_0098_GY15OGJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GY15OGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_78",
+    "image": "images/crop_0078_NA13NRU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA13NRU"
+      }
+    ]
+  },
+  {
+    "id": "sample_88",
+    "image": "images/crop_0088_GX15OGJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GX15OGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_86",
+    "image": "images/crop_0086_GX15OGJ.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GX15OGJ"
+      }
+    ]
+  },
+  {
+    "id": "sample_29",
+    "image": "images/bench_0029_SC56DYP_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "SC56DYP"
+      }
+    ]
+  },
+  {
+    "id": "sample_93",
+    "image": "images/crop_0093_AF05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AF05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_132",
+    "image": "images/crop_0132_EY61NBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_24",
+    "image": "images/bench_0024_FJ14ZHY.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "FJ14ZHY"
+      }
+    ]
+  },
+  {
+    "id": "sample_73",
+    "image": "images/bench_0073_LN15ZZC_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LN15ZZC"
+      }
+    ]
+  },
+  {
+    "id": "sample_46",
+    "image": "images/bench_0046_AK64DMV_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AK64DMV"
+      }
+    ]
+  },
+  {
+    "id": "sample_79",
+    "image": "images/crop_0079_NA13NRU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA13NRU"
+      }
+    ]
+  },
+  {
+    "id": "sample_80",
+    "image": "images/crop_0080_NA13NPU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA13NPU"
+      }
+    ]
+  },
+  {
+    "id": "sample_37",
+    "image": "images/bench_0037_AF65JKV_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AF65JKV"
+      }
+    ]
+  },
+  {
+    "id": "sample_139",
+    "image": "images/crop_0139_EY61NBC.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBC"
+      }
+    ]
+  },
+  {
+    "id": "sample_10",
+    "image": "images/bench_0010_LP14LJA_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LP14LJA"
+      }
+    ]
+  },
+  {
+    "id": "sample_99",
+    "image": "images/crop_0099_YH05ZZK.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "YH05ZZK"
+      }
+    ]
+  },
+  {
+    "id": "sample_15",
+    "image": "images/bench_0015_CE61LYL.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "CE61LYL"
+      }
+    ]
+  },
+  {
+    "id": "sample_68",
+    "image": "images/bench_0068_KH06KSU_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH06KSU"
+      }
+    ]
+  },
+  {
+    "id": "sample_58",
+    "image": "images/bench_0058_NV51VSU_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NV51VSU"
+      }
+    ]
+  },
+  {
+    "id": "sample_5",
+    "image": "images/bench_0005_BP63LYH_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "BP63LYH"
+      }
+    ]
+  },
+  {
+    "id": "sample_33",
+    "image": "images/bench_0033_EY61NBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_77",
+    "image": "images/bench_0077_KH05ZZK_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH05ZZK"
+      }
+    ]
+  },
+  {
+    "id": "sample_44",
+    "image": "images/bench_0044_LM13VCV_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LM13VCV"
+      }
+    ]
+  },
+  {
+    "id": "sample_45",
+    "image": "images/bench_0045_AK64DMV.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AK64DMV"
+      }
+    ]
+  },
+  {
+    "id": "sample_12",
+    "image": "images/bench_0012_NG65ZFX.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NG65ZFX"
+      }
+    ]
+  },
+  {
+    "id": "sample_48",
+    "image": "images/bench_0048_GJ06EPD.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "GJ06EPD"
+      }
+    ]
+  },
+  {
+    "id": "sample_11",
+    "image": "images/bench_0011_LP14LJA_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LP14LJA"
+      }
+    ]
+  },
+  {
+    "id": "sample_13",
+    "image": "images/bench_0013_NG65ZFX_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NG65ZFX"
+      }
+    ]
+  },
+  {
+    "id": "sample_107",
+    "image": "images/crop_0107_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_112",
+    "image": "images/crop_0112_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_27",
+    "image": "images/bench_0027_SC56DYP.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "SC56DYP"
+      }
+    ]
+  },
+  {
+    "id": "sample_19",
+    "image": "images/bench_0019_NL64OGX_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NL64OGX"
+      }
+    ]
+  },
+  {
+    "id": "sample_116",
+    "image": "images/crop_0116_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_43",
+    "image": "images/bench_0043_LM13VCV_aug0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LM13VCV"
+      }
+    ]
+  },
+  {
+    "id": "sample_54",
+    "image": "images/bench_0054_NA13NRU.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NA13NRU"
+      }
+    ]
+  },
+  {
+    "id": "sample_122",
+    "image": "images/crop_0122_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_20",
+    "image": "images/bench_0020_NL64OGX_aug1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "NL64OGX"
+      }
+    ]
+  },
+  {
+    "id": "sample_115",
+    "image": "images/crop_0115_AP05JED.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JED"
+      }
+    ]
+  },
+  {
+    "id": "sample_97",
+    "image": "images/crop_0097_LM13VCV.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "LM13VCV"
+      }
+    ]
+  },
+  {
+    "id": "sample_0",
+    "image": "images/bench_0000_EY06VVS.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY06VVS"
+      }
+    ]
+  },
+  {
+    "id": "sample_111",
+    "image": "images/crop_0111_KH05ZTK.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH05ZTK"
+      }
+    ]
+  },
+  {
+    "id": "sample_103",
+    "image": "images/crop_0103_AP05JEO.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "AP05JEO"
+      }
+    ]
+  },
+  {
+    "id": "sample_136",
+    "image": "images/crop_0136_EY61NBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_75",
+    "image": "images/bench_0075_KH05ZZK.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "KH05ZZK"
+      }
+    ]
+  },
+  {
+    "id": "sample_137",
+    "image": "images/crop_0137_EY61NBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61NBG"
+      }
+    ]
+  },
+  {
+    "id": "sample_141",
+    "image": "images/crop_0141_EY61MBG.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nRead the vehicle license plate number shown in this cropped image. Output ONLY the alphanumeric plate characters with no extra spaces, punctuation, or explanation."
+      },
+      {
+        "from": "gpt",
+        "value": "EY61MBG"
+      }
+    ]
+  }
+]

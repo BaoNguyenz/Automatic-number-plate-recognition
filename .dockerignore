@@ -1,0 +1,29 @@
+.git
+.gitignore
+.dockerignore
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+.system_generated/
+scratch/
+
+# Large media files
+media/
+*.mp4
+*.avi
+out.mp4
+2103099-uhd_3840_2160_30fps.mp4
+
+# Databases and generated datasets
+data/*.db
+data/*.csv
+data/finetune_dataset/
+
+# Hardware-specific Windows engines
+Weight/*.engine
+Weight/*.onnx
+
+# Environment
+.env
+.venv
