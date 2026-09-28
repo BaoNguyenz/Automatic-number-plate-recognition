@@ -91,24 +91,10 @@ flowchart LR
 
 ### 🔄 Pipeline Stage Breakdown
 
-1. **Detection Stage (Parallel TensorRT FP16 Inferences):**
-   - **Vehicle Detection (`yolov8n.engine` - 2.4ms):** Identifies vehicle bounding boxes $[x_1, y_1, x_2, y_2, \text{conf}, \text{cls}]$ across 4 vehicle classes (Car, Bus, Truck, Motorcycle).
-   - **Plate Detection (`license_plate_detector.engine` - 2.7ms):** High-precision localized bounding box extraction targeting the license plate region.
-2. **Tracking & Association Stage:**
-   - **Multi-Object Tracking (ByteTrack):** Applies Kalman filtering and two-stage Hungarian association to track vehicles through occlusions with persistent track IDs.
-   - **Spatial Association:** Maps plate boxes to parent vehicles via spatial containment and Intersection-over-Plate ($\text{IoP} \ge 0.85$).
-   - **Adaptive Best-Frame Selector:** Pools candidate plate crops over the vehicle's trajectory and evaluates sharpness and resolution:
-     $$\text{Score} = \text{Confidence} \times \sqrt{\text{Area}} \times \ln(1 + \text{Var}(\nabla^2 I))$$
-     Aggressively filters motion blur and selects **exactly 1 optimal crop per vehicle**, reducing downstream OCR compute by **>95%**.
-3. **Recognition Stage (Raw RGB Crops):**
-   - **Dual Recognition Engine:**
-     - *Fast Mode:* **PaddleOCR (PP-OCRv6)** delivers lightweight character recognition in **~25ms**.
-     - *SOTA Mode:* **Fine-Tuned Qwen2-VL-2B (QLoRA 4-bit)** delivers **80.8% Exact Match** accuracy on raw RGB crops without destructive binary thresholding.
-   - **Post-Processing & Validation:** Regex normalization against UK Standard format (`^[A-Z]{2}[0-9]{2}[A-Z]{3}$`) with generic fallback (`^[A-Z0-9]{4,10}$`) and LLM markdown/prefix stripping.
-4. **Output & Telemetry Stage:**
-   - **Database & Edge Storage:** SQLAlchemy ORM persists detection events to SQLite (`data/anpr.db`) / PostgreSQL with date-partitioned WebP image storage (~1.5 KB/plate).
-   - **Security Watchlist Interceptor:** Real-time flagging of stolen vehicles (`CRITICAL`) or toll violators (`WARNING`).
-   - **Presentation:** Real-time FastAPI Tactical Dashboard (`http://localhost:8000`) and 4D trajectory-interpolated HUD video rendering.
+1. **Detection Stage:** Parallel TensorRT FP16 models execute vehicle detection (`yolov8n.engine`, 2.4ms) and localized license plate detection (`license_plate_detector.engine`, 2.7ms) on every frame.
+2. **Tracking & Association:** ByteTrack maintains persistent vehicle IDs across occlusions, while Spatial Association matches plates to vehicles. The adaptive Best-Frame Selector evaluates sharpness and scale to extract the single optimal crop per vehicle, cutting recognition compute by **>95%**.
+3. **Recognition Stage:** Character extraction directly on raw RGB crops — ultra-fast via **PaddleOCR** (~25ms) or SOTA accuracy via **Fine-Tuned Qwen2-VL 4-bit** (80.8% Exact Match), followed by regex normalization and format checks.
+4. **Output & Telemetry:** Persists audit logs to SQLAlchemy ORM with WebP image compression (~1.5 KB), triggers instant security watchlist alerts (`CRITICAL` / `WARNING`), and streams telemetry to the FastAPI command dashboard and HUD video.
 
 ---
 
