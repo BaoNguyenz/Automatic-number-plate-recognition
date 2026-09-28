@@ -1,12 +1,34 @@
 # 🚗 ANPR Sentry Tactical — Real-Time License Plate Recognition & Surveillance
 
-[![CI/CD Pipeline](https://github.com/BaoNguyenz/Automatic-number-plate-recognition/actions/workflows/ci.yml/badge.svg)](https://github.com/BaoNguyenz/Automatic-number-plate-recognition/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.4%2Bcu124-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![NVIDIA TensorRT](https://img.shields.io/badge/TensorRT-11.3_FP16-76B900?logo=nvidia&logoColor=white)](https://developer.nvidia.com/tensorrt)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Docker](https://img.shields.io/badge/Docker-GPU_Enabled-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="left">
+  <a href="#-ci-cd-pipeline">
+    <img src="https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=githubactions&logoColor=white" alt="CI/CD">
+  </a>
+  <a href="#-tech-stack">
+    <img src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white" alt="Python">
+  </a>
+  <a href="#-tech-stack">
+    <img src="https://img.shields.io/badge/PyTorch-2.4%2Bcu124-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch">
+  </a>
+  <a href="#-tech-stack">
+    <img src="https://img.shields.io/badge/NVIDIA-TensorRT_11.3_FP16-76B900?logo=nvidia&logoColor=white" alt="TensorRT">
+  </a>
+  <a href="#-tech-stack">
+    <img src="https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white" alt="FastAPI">
+  </a>
+  <a href="#-docker-compose-deployment">
+    <img src="https://img.shields.io/badge/Docker-GPU_Enabled-2496ED?logo=docker&logoColor=white" alt="Docker">
+  </a>
+  <a href="#-testing--code-quality">
+    <img src="https://img.shields.io/badge/Pytest-19_Passed-0A9EDC?logo=pytest&logoColor=white" alt="Pytest">
+  </a>
+  <a href="#-testing--code-quality">
+    <img src="https://img.shields.io/badge/Pylint-10.00%2F10-brightgreen?logo=python&logoColor=white" alt="Pylint">
+  </a>
+  <a href="#-license">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+  </a>
+</p>
 
 > **High-throughput, edge-optimized Automatic Number Plate Recognition (ANPR/ALPR) and intelligent traffic surveillance platform.**  
 > Completely modernizes legacy, fragile OpenCV thresholding and heuristic OCR into a high-performance system powered by **TensorRT FP16 acceleration (<3ms)**, **ByteTrack multi-object tracking**, an adaptive **Laplacian/Scale Best-Frame Selector**, and **Dual Recognition Engines (PaddleOCR & Fine-Tuned 4-bit Qwen2-VL)** with real-time **Security Watchlist Alerting** and an interactive cyber-dark command dashboard.
@@ -39,39 +61,63 @@
 
 ```mermaid
 flowchart LR
-    subgraph IN ["1. Input Source"]
-        A["UHD 4K Video Stream / Image Upload"]
+    %% Academic Pipeline Architecture - Clean & High Contrast
+    classDef default fill:#f8fafc,stroke:#334155,stroke-width:1.5px,color:#0f172a;
+    classDef core fill:#eff6ff,stroke:#2563eb,stroke-width:1.8px,color:#1e40af;
+    classDef opt fill:#fef3c7,stroke:#d97706,stroke-width:1.8px,color:#92400e;
+
+    IN["Input Video Stream / Image Frame"]:::default
+
+    subgraph DET ["1. Detection Stage"]
+        VD["Vehicle Detection\n(YOLOv8)"]:::core
+        LD["License Plate Detection\n(YOLOv8)"]:::core
     end
 
-    subgraph DET ["2. TensorRT Vision Engines"]
-        B["Vehicle Detector (yolov8n.engine - 2.4ms)"]
-        C["Plate Detector (license_plate.engine - 2.7ms)"]
+    subgraph TRK ["2. Tracking & Association"]
+        TRACK["Multi-Object Tracking\n(ByteTrack)"]:::default
+        MATCH["Spatial Association\n(Plate-to-Vehicle)"]:::default
+        BEST["Best-Frame Selector\n(Laplacian + Scale)"]:::opt
     end
 
-    subgraph TRK ["3. Tracking & Filtering"]
-        D["ByteTrack Multi-Object Tracker"]
-        E["Spatial IoU Association"]
-        F["Best-Frame Quality Scorer (Laplacian + Scale)"]
+    subgraph REC ["3. Recognition Stage"]
+        OCR["Character Recognition\n(PaddleOCR / Qwen2-VL)"]:::core
+        POST["Post-Processing & Validation\n(Regex & Normalization)"]:::default
     end
 
-    subgraph OCR ["4. Dual Recognition Engine"]
-        G1["Option A: PaddleOCR (~25ms)"]
-        G2["Option B: Qwen2-VL 4-bit (80.8% Exact Match)"]
-        H["PlatePostProcessor (UK Regex & Normalization)"]
-    end
+    OUT["Output & Telemetry\n(Database / Alerts / HUD Video)"]:::default
 
-    subgraph OUT ["5. Output & Security"]
-        I["SQLAlchemy ORM (SQLite / PostgreSQL)"]
-        J["WebP Edge Storage (1.5 KB/plate)"]
-        K{"Watchlist Alert Interceptor"}
-        L["FastAPI Tactical Dashboard & HUD Video"]
-    end
-
-    A --> B & C
-    B & C --> D --> E --> F
-    F --> G1 & G2 --> H
-    H --> I & J & K --> L
+    %% Dataflow Connections
+    IN --> VD
+    IN --> LD
+    VD -->|Vehicle BBoxes| TRACK
+    TRACK -->|Track ID & Trajectory| MATCH
+    LD -->|Plate BBoxes| MATCH
+    MATCH -->|Candidate Crops| BEST
+    BEST -->|Optimal Crop| OCR
+    OCR -->|Raw Text| POST
+    POST -->|Verified Plate| OUT
 ```
+
+### 🔄 Pipeline Stage Breakdown
+
+1. **Detection Stage (Parallel TensorRT FP16 Inferences):**
+   - **Vehicle Detection (`yolov8n.engine` - 2.4ms):** Identifies vehicle bounding boxes $[x_1, y_1, x_2, y_2, \text{conf}, \text{cls}]$ across 4 vehicle classes (Car, Bus, Truck, Motorcycle).
+   - **Plate Detection (`license_plate_detector.engine` - 2.7ms):** High-precision localized bounding box extraction targeting the license plate region.
+2. **Tracking & Association Stage:**
+   - **Multi-Object Tracking (ByteTrack):** Applies Kalman filtering and two-stage Hungarian association to track vehicles through occlusions with persistent track IDs.
+   - **Spatial Association:** Maps plate boxes to parent vehicles via spatial containment and Intersection-over-Plate ($\text{IoP} \ge 0.85$).
+   - **Adaptive Best-Frame Selector:** Pools candidate plate crops over the vehicle's trajectory and evaluates sharpness and resolution:
+     $$\text{Score} = \text{Confidence} \times \sqrt{\text{Area}} \times \ln(1 + \text{Var}(\nabla^2 I))$$
+     Aggressively filters motion blur and selects **exactly 1 optimal crop per vehicle**, reducing downstream OCR compute by **>95%**.
+3. **Recognition Stage (Raw RGB Crops):**
+   - **Dual Recognition Engine:**
+     - *Fast Mode:* **PaddleOCR (PP-OCRv6)** delivers lightweight character recognition in **~25ms**.
+     - *SOTA Mode:* **Fine-Tuned Qwen2-VL-2B (QLoRA 4-bit)** delivers **80.8% Exact Match** accuracy on raw RGB crops without destructive binary thresholding.
+   - **Post-Processing & Validation:** Regex normalization against UK Standard format (`^[A-Z]{2}[0-9]{2}[A-Z]{3}$`) with generic fallback (`^[A-Z0-9]{4,10}$`) and LLM markdown/prefix stripping.
+4. **Output & Telemetry Stage:**
+   - **Database & Edge Storage:** SQLAlchemy ORM persists detection events to SQLite (`data/anpr.db`) / PostgreSQL with date-partitioned WebP image storage (~1.5 KB/plate).
+   - **Security Watchlist Interceptor:** Real-time flagging of stolen vehicles (`CRITICAL`) or toll violators (`WARNING`).
+   - **Presentation:** Real-time FastAPI Tactical Dashboard (`http://localhost:8000`) and 4D trajectory-interpolated HUD video rendering.
 
 ### Tech Stack
 
