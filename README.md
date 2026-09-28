@@ -35,14 +35,6 @@
 
 ---
 
-## 📸 Demo & Screenshots
-
-| Mission-Control Command Dashboard (`http://localhost:8000`) | Tactical HUD Video Overlay & Stolen Vehicle Interception |
-| :---: | :---: |
-| ![ANPR Sentry Tactical Dashboard](docs/assets/dashboard_preview.png) | ![Tactical HUD Overlays](docs/assets/annotated_detection.png) |
-
----
-
 ## ⚡ Core Features
 
 - **Sub-3ms TensorRT Inference:** YOLOv8n vehicle & plate detection compiled with TensorRT FP16 (200+ FPS throughput).
