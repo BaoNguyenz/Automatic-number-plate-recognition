@@ -314,7 +314,7 @@ class WatchlistCreate(BaseModel):
 @app.post("/api/watchlist")
 async def add_watchlist(item: WatchlistCreate):
     """Adds a plate number to the watchlist."""
-    clean_plate = PlatePostProcessor.clean_plate_text(item.plate_number)[0]
+    clean_plate = PlatePostProcessor.clean_text(item.plate_number)
     with engine_mgr.db.get_session() as s:
         existing = s.query(Watchlist).filter(Watchlist.plate_number == clean_plate).first()
         if existing:

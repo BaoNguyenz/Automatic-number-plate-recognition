@@ -54,6 +54,9 @@ class PlatePostProcessor:
 
         return cleaned
 
+    # Backward compatibility alias
+    clean_plate_text = clean_text
+
     @classmethod
     def validate_format(cls, plate_text: str) -> bool:
         """

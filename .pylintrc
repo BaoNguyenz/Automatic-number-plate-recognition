@@ -1,0 +1,65 @@
+[MAIN]
+jobs=1
+persistent=no
+ignored-modules=transformers,torch,torchvision,paddleocr,paddle,scipy
+
+[MESSAGES CONTROL]
+# Disable stylistic, cosmetic, and dynamic import warnings suited for CV/ML repos
+disable=
+    raw-checker-failed,
+    bad-inline-option,
+    locally-disabled,
+    file-ignored,
+    suppressed-message,
+    useless-suppression,
+    deprecated-pragma,
+    use-symbolic-message-instead,
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-positional-arguments,
+    too-many-locals,
+    too-many-branches,
+    too-many-statements,
+    too-many-instance-attributes,
+    too-many-public-methods,
+    too-many-lines,
+    broad-exception-caught,
+    broad-exception-raised,
+    import-error,
+    no-member,
+    duplicate-code,
+    fixme,
+    logging-fstring-interpolation,
+    wrong-import-position,
+    wrong-import-order,
+    import-outside-toplevel,
+    invalid-name,
+    line-too-long,
+    no-else-return,
+    singleton-comparison,
+    global-statement,
+    unused-import,
+    unused-argument,
+    unused-variable,
+    trailing-whitespace,
+    trailing-newlines
+
+[FORMAT]
+max-line-length=120
+max-module-lines=2000
+indent-string='    '
+
+[BASIC]
+good-names=i,j,k,x,y,w,h,x1,y1,x2,y2,dx,dy,dt,db,fn,f,e,v,t,df,id,cv,np,tr,q,H,W
+variable-rgx=[a-zA-Z_][a-zA-Z0-9_]{0,35}$
+argument-rgx=[a-zA-Z_][a-zA-Z0-9_]{0,35}$
+function-rgx=[a-zA-Z_][a-zA-Z0-9_]{1,35}$
+class-rgx=[A-Z_][a-zA-Z0-9]+$
+
+[REPORTS]
+output-format=text
+reports=no
+score=yes
