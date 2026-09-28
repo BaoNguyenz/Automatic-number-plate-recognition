@@ -89,12 +89,12 @@ flowchart LR
     POST -->|Verified Plate| OUT
 ```
 
-### 🔄 Pipeline Stage Breakdown
+### 🔄 Pipeline Breakdown
 
-1. **Detection Stage:** Parallel TensorRT FP16 models execute vehicle detection (`yolov8n.engine`, 2.4ms) and localized license plate detection (`license_plate_detector.engine`, 2.7ms) on every frame.
-2. **Tracking & Association:** ByteTrack maintains persistent vehicle IDs across occlusions, while Spatial Association matches plates to vehicles. The adaptive Best-Frame Selector evaluates sharpness and scale to extract the single optimal crop per vehicle, cutting recognition compute by **>95%**.
-3. **Recognition Stage:** Character extraction directly on raw RGB crops — ultra-fast via **PaddleOCR** (~25ms) or SOTA accuracy via **Fine-Tuned Qwen2-VL 4-bit** (80.8% Exact Match), followed by regex normalization and format checks.
-4. **Output & Telemetry:** Persists audit logs to SQLAlchemy ORM with WebP image compression (~1.5 KB), triggers instant security watchlist alerts (`CRITICAL` / `WARNING`), and streams telemetry to the FastAPI command dashboard and HUD video.
+*   **1. Detection:** Dual TensorRT FP16 models detect vehicles (2.4ms) and license plates (2.7ms) in parallel on every frame.
+*   **2. Tracking & Filtering:** ByteTrack maintains persistent vehicle trajectories, while an adaptive Best-Frame Selector extracts the single sharpest crop per vehicle—cutting recognition compute by **>95%**.
+*   **3. Recognition:** Direct character extraction on raw RGB crops using **PaddleOCR** (fast, ~25ms) or **Fine-Tuned Qwen2-VL 4-bit** (accurate, 80.8% Exact Match) with regex format validation.
+*   **4. Output & Telemetry:** Persists audit records to database with WebP crops (~1.5 KB), triggers real-time watchlist alerts, and streams live telemetry to the web dashboard and HUD video.
 
 ---
 
