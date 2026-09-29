@@ -158,7 +158,7 @@ def run_pipeline(
             "plate_number": plate_str,
             "vehicle_type": v.vehicle_type,
             "is_watchlist": det_record.is_watchlist_match,
-            "alert_level": "CRITICAL" if "mất cắp" in str(det_record.watchlist_reason) else "WARNING",
+            "alert_level": "CRITICAL" if any(k in str(det_record.watchlist_reason).lower() for k in ["stolen", "mất cắp"]) else "WARNING",
             "watchlist_reason": det_record.watchlist_reason,
             "best_crop_frame": v.best_crop_frame,
             "crop_path": crop_path

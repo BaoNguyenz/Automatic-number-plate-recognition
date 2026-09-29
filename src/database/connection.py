@@ -55,18 +55,18 @@ class DatabaseManager:
             session.close()
 
     def seed_mock_watchlists(self):
-        """Tự động nạp 2 biển số giả lập trong video để kiểm thử tính năng Watchlist Alert."""
+        """Automatically seeds 2 mock watchlist license plates for alert testing."""
         mock_data = [
             {
                 "plate_number": "SC56DYP",
-                "vehicle_owner": "Nguyễn Văn A",
-                "reason": "Phương tiện bị báo mất cắp (Mock Test Case)",
+                "vehicle_owner": "John Doe",
+                "reason": "Stolen Vehicle (Mock Test Case)",
                 "alert_level": "CRITICAL"
             },
             {
                 "plate_number": "EY61NBG",
-                "vehicle_owner": "Trần Thị B",
-                "reason": "Phương tiện trốn đóng phí giao thông (Mock Test Case)",
+                "vehicle_owner": "Jane Smith",
+                "reason": "Toll Evasion / Unpaid Fines (Mock Test Case)",
                 "alert_level": "WARNING"
             }
         ]
@@ -79,7 +79,7 @@ class DatabaseManager:
                     session.add(watchlist_entry)
 
     def check_watchlist(self, plate_number: str) -> tuple[bool, str, str]:
-        """Kiểm tra biển số có nằm trong danh sách đen không. Trả về (is_match, reason, alert_level)."""
+        """Checks if a plate number is in the watchlist. Returns (is_match, reason, alert_level)."""
         clean_plate = plate_number.replace(" ", "").replace("-", "").upper()
         with self.get_session() as session:
             item = session.query(Watchlist).filter(
@@ -101,7 +101,7 @@ class DatabaseManager:
         vehicle_color: str = None,
         plate_crop_path: str = None
     ) -> VehicleDetection:
-        """Lưu một lượt phát hiện xe vào database, tự động kiểm tra Watchlist và kích hoạt cờ cảnh báo."""
+        """Saves a detection event to database, checks Watchlist, and triggers alert flags."""
         is_match, reason, level = self.check_watchlist(plate_number)
 
         record = VehicleDetection(
@@ -124,10 +124,10 @@ class DatabaseManager:
 
             if is_match:
                 print("\n" + "!" * 80)
-                print(f"🚨 [WATCHLIST ALERT - {level}] PHÁT HIỆN XE TRONG DANH SÁCH THEO DÕI!")
-                print(f"   ► Biển số: {plate_number}")
-                print(f"   ► Xe ID:   {car_id} (Frame: {frame_number})")
-                print(f"   ► Lý do:   {reason}")
+                print(f"🚨 [WATCHLIST ALERT - {level}] SUSPICIOUS VEHICLE DETECTED!")
+                print(f"   ► Plate:    {plate_number}")
+                print(f"   ► Car ID:   {car_id} (Frame: {frame_number})")
+                print(f"   ► Reason:   {reason}")
                 print("!" * 80 + "\n")
 
             return record

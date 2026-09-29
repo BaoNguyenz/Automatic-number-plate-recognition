@@ -20,7 +20,7 @@ def test_check_watchlist(temp_db):
     is_match, reason, level = temp_db.check_watchlist("SC56DYP")
     assert is_match is True
     assert level == "CRITICAL"
-    assert "mất cắp" in reason
+    assert "stolen" in reason.lower() or "mất cắp" in reason.lower()
 
     # Clean car
     is_match_clean, _, _ = temp_db.check_watchlist("AP05JEO")
@@ -53,7 +53,7 @@ def test_add_detection_watchlist_hit(temp_db):
         vehicle_type="car"
     )
     assert rec.is_watchlist_match is True
-    assert "mất cắp" in rec.watchlist_reason
+    assert "stolen" in rec.watchlist_reason.lower() or "mất cắp" in rec.watchlist_reason.lower()
 
 
 def test_query_detections(temp_db):
