@@ -77,6 +77,10 @@ class DatabaseManager:
                 if not existing:
                     watchlist_entry = Watchlist(**item)
                     session.add(watchlist_entry)
+                else:
+                    existing.vehicle_owner = item["vehicle_owner"]
+                    existing.reason = item["reason"]
+                    existing.alert_level = item["alert_level"]
 
     def check_watchlist(self, plate_number: str) -> tuple[bool, str, str]:
         """Checks if a plate number is in the watchlist. Returns (is_match, reason, alert_level)."""
