@@ -37,7 +37,7 @@
 </p>
 
 **ANPR Sentry Tactical** is a high-throughput, edge-optimized Automatic Number Plate Recognition (ANPR/ALPR) and intelligent traffic surveillance platform. Completely modernizing legacy, fragile OpenCV thresholding and heuristic OCR, the system integrates:
-- **Dual TensorRT FP16 Vision Engines (<3ms)** for parallel vehicle and localized license plate detection (200+ FPS throughput)
+- **Dual TensorRT FP16 Vision Engines (<3ms)** for sequential two-stage vehicle and localized license plate detection (200+ FPS throughput)
 - **ByteTrack Multi-Object Tracking** with Kalman filtering and two-stage Hungarian association for persistent track ID retention across occlusions
 - **Adaptive Laplacian/Scale Best-Frame Selection** pooling candidate crops to eliminate motion blur and reduce downstream recognition compute by **>95%**
 - **Dual Modular Recognition Engines:** Ultra-fast lightweight **PaddleOCR (PP-OCRv6)** (~25ms) and SOTA **Fine-Tuned 4-bit Qwen2-VL (QLoRA)** achieving **80.8% Exact Match** on raw RGB crops without thresholding
@@ -59,42 +59,42 @@ flowchart LR
 
     IN["Input Video Stream / Image Frame"]:::default
 
-    subgraph DET ["1. Detection Stage"]
-        VD["Vehicle Detection\n(YOLOv8)"]:::core
-        LD["License Plate Detection\n(YOLOv8)"]:::core
+    subgraph DET ["1. Sequential Detection Stage"]
+        VD["1. Vehicle Detection\n(YOLOv8 - 2.4ms)"]:::core
+        LD["2. License Plate Detection\n(YOLOv8 - 2.7ms)"]:::core
     end
 
-    subgraph TRK ["2. Tracking & Association"]
-        TRACK["Multi-Object Tracking\n(ByteTrack)"]:::default
-        MATCH["Spatial Association\n(Plate-to-Vehicle)"]:::default
+    subgraph VAL ["2. Validation & Tracking Stage"]
+        MATCH["Spatial Validation\n(Validate Plate with Vehicle)"]:::default
+        ASSIGN["3. Assign car_id\n(ByteTrack Association)"]:::default
         BEST["Best-Frame Selector\n(Laplacian + Scale)"]:::opt
     end
 
     subgraph REC ["3. Recognition Stage"]
         OCR["Character Recognition\n(PaddleOCR / Qwen2-VL)"]:::core
-        POST["Post-Processing & Validation\n(Regex & Normalization)"]:::default
+        POST["Post-Processing\n(Regex Normalization)"]:::default
     end
 
     OUT["Output & Telemetry\n(Database / Alerts / HUD Video)"]:::default
 
     %% Dataflow Connections
     IN --> VD
-    IN --> LD
-    VD -->|Vehicle BBoxes| TRACK
-    TRACK -->|Track ID & Trajectory| MATCH
+    VD -->|Sequential Pass| LD
+    VD -->|Vehicle BBoxes| MATCH
     LD -->|Plate BBoxes| MATCH
-    MATCH -->|Candidate Crops| BEST
-    BEST -->|Optimal Crop| OCR
+    MATCH -->|Validated Pair| ASSIGN
+    ASSIGN -->|Tracked car_id & Crops| BEST
+    BEST -->|Optimal Sharpest Crop| OCR
     OCR -->|Raw Text| POST
-    POST -->|Verified Plate| OUT
+    POST -->|Verified Plate & car_id| OUT
 ```
 
 ### 🔄 Pipeline Breakdown
 
-*   **1. Detection:** Dual TensorRT FP16 models detect vehicles (2.4ms) and license plates (2.7ms) in parallel on every frame.
-*   **2. Tracking & Filtering:** ByteTrack maintains persistent vehicle trajectories, while an adaptive Best-Frame Selector extracts the single sharpest crop per vehicle—cutting recognition compute by **>95%**.
-*   **3. Recognition:** Direct character extraction on raw RGB crops using **PaddleOCR** (fast, ~25ms) or **Fine-Tuned Qwen2-VL 4-bit** (accurate, 80.8% Exact Match) with regex format validation.
-*   **4. Output & Telemetry:** Persists audit records to database with WebP crops (~1.5 KB), triggers real-time watchlist alerts, and streams live telemetry to the web dashboard and HUD video.
+*   **1. Vehicle Detection:** YOLOv8 detects vehicle bounding boxes across the full input frame (2.4ms).
+*   **2. License Plate Detection:** Dedicated YOLOv8 runs sequentially to detect localized license plate bounding boxes (2.7ms).
+*   **3. Validation & `car_id` Assignment:** Spatially validates that the detected plate belongs to the detected vehicle (spatial containment test), then assigns a persistent `car_id` via ByteTrack. The Best-Frame Selector tracks the vehicle across frames to pick only the single sharpest crop—reducing recognition compute by **>95%**.
+*   **4. Recognition & Output:** Direct character extraction via **PaddleOCR** (fast, ~25ms) or **Qwen2-VL 4-bit** (accurate, 80.8% Exact Match), regex format validation, database logging, and real-time watchlist alert broadcasting.
 
 ---
 
