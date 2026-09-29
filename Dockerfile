@@ -36,8 +36,8 @@ RUN python3 -c "from paddleocr import PaddleOCR; PaddleOCR(lang='en', use_angle_
 # Copy project source code
 COPY . /app
 
-# Ensure scripts and entrypoint are executable
-RUN chmod +x /app/entrypoint.sh
+# Ensure scripts and entrypoint have Unix LF endings and are executable
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 # Expose FastAPI HTTP Web Dashboard Port
 EXPOSE 8000
