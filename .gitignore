@@ -33,4 +33,5 @@ __pycache__/
 scratch/
 .env
 .venv
-.pytest_cache/
+.pytest_cache/
+DESIGN.md
