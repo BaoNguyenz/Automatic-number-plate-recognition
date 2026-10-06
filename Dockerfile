@@ -30,20 +30,20 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# # Pre-cache PaddleOCR lightweight models into image (offline-ready)
-# RUN python3 -c "from paddleocr import PaddleOCR; PaddleOCR(lang='en', use_angle_cls=False)" || true
+# Pre-cache PaddleOCR lightweight models into image (offline-ready)
+RUN python3 -c "from paddleocr import PaddleOCR; PaddleOCR(lang='en', use_angle_cls=False)" || true
 
-# # Copy project source code
-# COPY . /app
+# Copy project source code
+COPY . /app
 
-# # Ensure scripts and entrypoint have Unix LF endings and are executable
-# RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
+# Ensure scripts and entrypoint have Unix LF endings and are executable
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
-# # Expose FastAPI HTTP Web Dashboard Port
-# EXPOSE 8000
+# Expose FastAPI HTTP Web Dashboard Port
+EXPOSE 8000
 
-# # Health check to ensure FastAPI is online
-# HEALTHCHECK --interval=30s --timeout=10s --start-period=45s --retries=3 \
-#     CMD curl -f http://localhost:8000/api/system/status || exit 1
+# Health check to ensure FastAPI is online
+HEALTHCHECK --interval=30s --timeout=10s --start-period=45s --retries=3 \
+    CMD curl -f http://localhost:8000/api/system/status || exit 1
 
-# ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
